@@ -5,7 +5,7 @@ exports.dbConfig = {
     user: 'root',//数据库用户名
     password: 'root',//数据库用户密码
     port: 3306,
-    database: 'umall-data' // 数据库名字
+    database: 'umallapi' // 数据库名字
 }
 
 // token过期时间 (分钟单位)

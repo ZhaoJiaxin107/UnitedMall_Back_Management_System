@@ -26,6 +26,9 @@
 </template>
 
 <script>
+// 从user中导出登录方法
+import { login } from '@/api/user'
+
 export default {
   data () {
     return {
@@ -58,7 +61,15 @@ export default {
       })
     },
     login () {
-      console.log('login')
+      // 登录处理
+      login(this.loginInfo.username, this.loginInfo.password).then(res => {
+        // console.log(res)
+        // 登录成功, 把返回的信息保存到sessionStorage中
+      }).catch(err => {
+        // console.error(err.message)
+        // 登录失败，显示错误信息
+        this.$message.error(err.message)
+      })
     }
   }
 }

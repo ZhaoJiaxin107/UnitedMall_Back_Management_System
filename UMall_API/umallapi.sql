@@ -12,7 +12,7 @@ File Encoding         : 65001
 
 Date: 2021-01-26 16:53:36
 */
-
+USE umallapi;
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
