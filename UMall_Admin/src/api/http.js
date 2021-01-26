@@ -9,7 +9,7 @@ const http = axios.create({
 // 2.响应拦截
 http.interceptors.response.use(function (response) {
   response = response.data
-  console.log('http interceptors', response)
+  // console.log('http interceptors', response)
   if (response.code === 200) { // 接口请求成功(包括数据正常返回)
     return response.list || null
   }

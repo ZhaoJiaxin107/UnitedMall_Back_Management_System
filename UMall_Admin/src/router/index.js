@@ -15,7 +15,7 @@ router.beforeEach((to, from, next) => {
   // console.log(to.meta)
   // 设置页面标题
   document.title = to.meta.title || 'United Mall Backend Management System'
-  // 如果要跳转的页面不是登录页面，就必要登录成功之后才能访问
+  // 如果要跳转的页面不是登录页面，就必须要登录成功之后才能访问
   if (to.path === '/login') {
     // 跳转的就是登录页面，不做拦截
     next()
