@@ -65,6 +65,9 @@ export default {
       login(this.loginInfo.username, this.loginInfo.password).then(res => {
         // console.log(res)
         // 登录成功, 把返回的信息保存到sessionStorage中
+        sessionStorage.setItem('user', JSON.stringify(res))
+        // 跳转到后台首页
+        this.$router.replace('/')
       }).catch(err => {
         // console.error(err.message)
         // 登录失败，显示错误信息
