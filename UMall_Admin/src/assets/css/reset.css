@@ -5,6 +5,10 @@ body, h1, h2, h3, h4, h5, h6, p, dl, dd, ul, ol, input{
     margin:0;/*去掉自带外间距*/
     padding:0;/*去掉自带内填充*/
 }
+body, html{
+    width: 100%;
+    height: 100%;
+}
 em, i{
     font-style:normal;/*斜体扶正*/
 }
