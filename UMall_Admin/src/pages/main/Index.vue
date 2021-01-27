@@ -7,7 +7,7 @@
      <el-aside width = "200px">
        <u-menu />
      </el-aside>
-     <el-main>Main
+     <el-main>
        <!-- 嵌套路由 -->
        <router-view />
      </el-main>
