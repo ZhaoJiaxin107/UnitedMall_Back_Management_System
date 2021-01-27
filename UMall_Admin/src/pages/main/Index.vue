@@ -1,10 +1,12 @@
 <template>
-  <el-container>
+  <el-container style = "height: 100%;">
     <el-header style="padding: 0;">
       <u-header></u-header>
     </el-header>
    <el-container>
-     <el-aside width = "200px">Aside</el-aside>
+     <el-aside width = "200px">
+       <u-menu />
+     </el-aside>
      <el-main>Main
        <!-- 嵌套路由 -->
        <router-view />
@@ -15,9 +17,11 @@
 
 <script>
 import UHeader from '../../components/Header'
+import UMenu from '../../components/Menu'
 export default {
   components: {
-    UHeader
+    UHeader,
+    UMenu
   }
 }
 </script>
