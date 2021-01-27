@@ -1,10 +1,24 @@
 <template>
-  <h2>后台主页</h2>
+  <el-container>
+    <el-header style="padding: 0;">
+      <u-header></u-header>
+    </el-header>
+   <el-container>
+     <el-aside width = "200px">Aside</el-aside>
+     <el-main>Main
+       <!-- 嵌套路由 -->
+       <router-view />
+     </el-main>
+   </el-container>
+  </el-container>
 </template>
 
 <script>
+import UHeader from '../../components/Header'
 export default {
-
+  components: {
+    UHeader
+  }
 }
 </script>
 
