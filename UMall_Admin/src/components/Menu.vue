@@ -9,22 +9,23 @@
       active-text-color: 菜单被选中时的文本颜色
       router: 是否使用vue-router的模式进行跳转，启用该模式激活导航时以Index作为
       参数进行路由跳转
+      default-active 设置为当前路由的path
      -->
     <el-menu
       router
-      default-active="1"
+      :default-active="$route.path"
       class="el-menu-vertical-demo"
       background-color="#3d5f81"
       text-color="#fff"
       active-text-color="#ffd04b"
     >
       <!-- 没有下级菜单的菜单项 -->
-      <el-menu-item index="/">
+      <el-menu-item index="/statistics">
         <i class="el-icon-menu"></i>
         <span slot="title">首页</span>
       </el-menu-item>
       <!-- 有下级菜单的菜单项 -->
-      <el-submenu index="2">
+      <el-submenu>
         <template slot="title">
           <i class="el-icon-s-tools"></i>
           <span>系统管理</span>
@@ -37,7 +38,7 @@
         </el-menu-item-group>
       </el-submenu>
 
-       <el-submenu index="3">
+       <el-submenu>
         <template slot="title">
           <i class="el-icon-s-goods"></i>
           <span>商城管理</span>
