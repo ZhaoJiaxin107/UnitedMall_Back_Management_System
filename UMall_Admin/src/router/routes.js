@@ -1,9 +1,19 @@
 const routes = [
   {
     path: '/',
+    // 重定向
+    redirect: '/statistics',
     name: 'Index',
     component: () => import('@/pages/main/Index'),
     children: [
+      {
+        path: 'statistics',
+        name: 'statistics',
+        component: () => import('@/pages/statistics/Index'),
+        meta: {
+          title: '图表统计'
+        }
+      },
       {
         path: 'menu',
         name: 'menu',
