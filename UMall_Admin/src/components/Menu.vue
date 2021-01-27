@@ -26,10 +26,26 @@
           <i class="el-icon-s-tools"></i>
           <span>系统管理</span>
         </template>
+        <!-- 一组菜单项 -->
         <el-menu-item-group>
           <el-menu-item index="2-1">菜单管理</el-menu-item>
           <el-menu-item index="2-2">角色管理</el-menu-item>
-          <el-menu-item index="2-2">管理员管理</el-menu-item>
+          <el-menu-item index="2-3">管理员管理</el-menu-item>
+        </el-menu-item-group>
+      </el-submenu>
+
+       <el-submenu index="3">
+        <template slot="title">
+          <i class="el-icon-s-goods"></i>
+          <span>商城管理</span>
+        </template>
+        <!-- 一组菜单项 -->
+        <el-menu-item-group>
+          <el-menu-item index="3-1">商品分类</el-menu-item>
+          <el-menu-item index="3-2">商品规格</el-menu-item>
+          <el-menu-item index="3-3">商品管理</el-menu-item>
+          <el-menu-item index="3-4">秒杀活动</el-menu-item>
+          <el-menu-item index="3-5">轮播图管理</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
     </el-menu>
