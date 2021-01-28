@@ -23,7 +23,7 @@
             <el-radio :label="2">菜单</el-radio>
         </el-radio-group>
     </el-form-item>
-    <el-form-item v-show = "form.type === 1" label="目录图标">
+    <el-form-item v-show = "form.type === 1" label="目录图标" prop="icon">
       <el-input v-model="form.icon" autocomplete="off" placeholder="请输入目录图标">
       </el-input>
     </el-form-item>
@@ -47,6 +47,19 @@ export default {
     // callback function 输出验证信息
     // 验证通过调用callback()
     // 验证没有通过调用callback(Error对象)
+    const checkIcon = (rule, value, callback) => {
+      // 如果是菜单的时候链接必填
+      if (this.form.type === 2) {
+        callback() // 验证通过
+      } else {
+        // 是菜单的时候验证必填
+        if (value === '') {
+          callback(new Error('请输入目录图标'))
+        } else {
+          callback()
+        }
+      }
+    }
     const checkUrl = (rule, value, callback) => {
       // 如果是菜单的时候链接必填
       if (this.form.type === 1) {
@@ -73,6 +86,9 @@ export default {
       rules: {
         title: [
           { required: true, message: '请输入名称', trigger: 'blur'}
+        ],
+        icon: [
+          { validator: checkIcon, trigger: 'blur'}
         ],
         url: [
           { validator: checkUrl, trigger: 'blur'}
