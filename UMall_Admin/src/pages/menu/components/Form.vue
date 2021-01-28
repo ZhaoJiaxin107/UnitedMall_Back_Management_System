@@ -31,6 +31,17 @@
       <el-input v-model.trim="form.url" autocomplete="off" placeholder="请输入菜单地址">
       </el-input>
     </el-form-item>
+    <el-form-item label="状态">
+       <!-- 开关组件
+            active-value: Boolean | string | number 选中时的值
+            inactive-value: Boolean | string | number 未选中时的值
+        -->
+       <el-switch
+       v-model="form.status"
+       :active-value="1"
+       :inactive-color="2">
+       </el-switch>
+    </el-form-item>
     <el-form-item>
        <el-button @click="dialogFormVisible = false">取 消</el-button>
        <el-button type="primary" @click="onSubmit">确 定</el-button>
