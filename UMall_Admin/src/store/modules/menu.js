@@ -5,6 +5,16 @@ export default {
   state: {
     list: [] // 菜单列表数据
   },
+  getters: {
+    firstMenuList (state) {
+      // 从list中筛选出一级菜单
+      return state.list.filter(item => item.type === 1 && item.pid === 0).map(item => (
+        {
+          id: item.id,
+          title: item.title
+        }))
+    }
+  },
   mutations: {
     SET_LIST (state, list) {
       state.list = list

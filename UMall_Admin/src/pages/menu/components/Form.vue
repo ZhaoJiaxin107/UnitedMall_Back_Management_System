@@ -14,6 +14,10 @@
         <!-- 当value与v-model的值相等的时候就选中 -->
         <!-- value与v-model是全等比较 -->
         <el-option label="顶级菜单" :value="0"></el-option>
+        <!-- 循环一级菜单 -->
+        <el-option v-for = "item of firstMenuList" :key="item.id" :label="' |- '+item.title"
+        :value="item.id">
+        </el-option>
       </el-select>
     </el-form-item>
     <el-form-item label = "菜单类型">
@@ -51,6 +55,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 // 引入接口方法
 import { addMenu } from '@/api/menu'
 const defaultForm = {
@@ -110,6 +115,11 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters({
+      firstMenuList: 'menu/firstMenuList'
+    })
+  },
   methods: {
     onSubmit () {
       this.$refs.form.validate(valid => {
@@ -126,6 +136,7 @@ export default {
               }
             })
             // 刷新列表数据
+            this.$store.dispatch('menu/getMenuList')
           }).catch(err => {
             this.$message.error(err.message)
           })

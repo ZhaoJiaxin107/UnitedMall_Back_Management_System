@@ -23,14 +23,12 @@
       label="菜单名称">
     </el-table-column>
     <el-table-column
-      prop="type"
       label="菜单类型">
     <template #default = "props">
       <el-tag>{{props.row.type === 1 ? '目录':'菜单'}}</el-tag>
     </template>
     </el-table-column>
     <el-table-column
-      prop="icon"
       label="菜单图标">
     <template #default = "props">
       <i v-if="props.row.icon !== ''" :class="props.row.icon"></i>
@@ -41,7 +39,6 @@
       label="菜单地址">
     </el-table-column>
     <el-table-column
-      prop="status"
       label="状态">
     <template #default = "props">
       <el-tag v-if = "props.row.status === 1">启用</el-tag>
@@ -49,8 +46,11 @@
     </template>
     </el-table-column>
     <el-table-column
-      prop="id"
       label="操作">
+    <template #default = "props">
+       <el-button type="primary" size = "mini"><i class="el-icon-edit"></i> 编辑</el-button>
+       <el-button type="danger" size = "mini"><i class="el-icon-delete"></i> 删除</el-button>
+    </template>
     </el-table-column>
   </el-table>
 </template>
