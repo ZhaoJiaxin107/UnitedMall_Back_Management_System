@@ -4,12 +4,12 @@
        visible: 是否显示
    -->
   <el-dialog title="添加菜单" :visible.sync="dialogFormVisible">
-  <el-form :model="form" label-suffix="：" label-width="120px">
-    <el-form-item :label="form.type === 1 ? '* 目录名称': '* 菜单名称'">
-      <el-input v-model="form.title" autocomplete="off" placeholder="请输入名称">
+  <el-form :model="form" ref="form" :rules = "rules" label-suffix="：" label-width="120px">
+    <el-form-item :label="form.type === 1 ? '目录名称': '菜单名称'" prop = "title">
+      <el-input v-model.trim="form.title" autocomplete="off" placeholder="请输入名称">
       </el-input>
     </el-form-item>
-    <el-form-item label="* 上级菜单">
+    <el-form-item label="上级菜单">
       <el-select v-model="form.pid" placeholder="请选择上级菜单">
         <!-- 当value与v-model的值相等的时候就选中 -->
         <!-- value与v-model是全等比较 -->
@@ -27,13 +27,13 @@
       <el-input v-model="form.icon" autocomplete="off" placeholder="请输入目录图标">
       </el-input>
     </el-form-item>
-    <el-form-item v-show = "form.type === 2" label="菜单地址">
-      <el-input v-model="form.url" autocomplete="off" placeholder="请输入菜单地址">
+    <el-form-item v-show = "form.type === 2" label="菜单地址" prop = "url">
+      <el-input v-model.trim="form.url" autocomplete="off" placeholder="请输入菜单地址">
       </el-input>
     </el-form-item>
     <el-form-item>
        <el-button @click="dialogFormVisible = false">取 消</el-button>
-       <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+       <el-button type="primary" @click="onSubmit">确 定</el-button>
     </el-form-item>
   </el-form>
 </el-dialog>
@@ -42,6 +42,24 @@
 <script>
 export default {
   data () {
+    // 自定义验证规则
+    // value就是要验证的表单的项
+    // callback function 输出验证信息
+    // 验证通过调用callback()
+    // 验证没有通过调用callback(Error对象)
+    const checkUrl = (rule, value, callback) => {
+      // 如果是菜单的时候链接必填
+      if (this.form.type === 1) {
+        callback() // 验证通过
+      } else {
+        // 是菜单的时候验证必填
+        if (value === '') {
+          callback(new Error('请输入菜单地址'))
+        } else {
+          callback()
+        }
+      }
+    }
     return {
       dialogFormVisible: true,
       form: {
@@ -51,8 +69,24 @@ export default {
         type: 1, // 类型 1目录 2菜单
         url: '', // 菜单地址(如果是菜单才必填)
         status: 1 // 状态 1正常 2禁用
-
+      },
+      rules: {
+        title: [
+          { required: true, message: '请输入名称', trigger: 'blur'}
+        ],
+        url: [
+          { validator: checkUrl, trigger: 'blur'}
+        ]
       }
+    }
+  },
+  methods: {
+    onSubmit () {
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          // 处理菜单的添加
+        }
+      })
     }
   }
 }
