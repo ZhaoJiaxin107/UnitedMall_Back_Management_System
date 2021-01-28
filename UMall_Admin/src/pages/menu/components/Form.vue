@@ -3,7 +3,7 @@
        title: 对话框标题
        visible: 是否显示
    -->
-  <el-dialog title="添加菜单" :visible.sync="dialogFormVisible" @close = "clearForm">
+  <el-dialog :title="title" :visible.sync="dialogFormVisible" @close = "clearForm">
   <el-form :model="form" ref="form" :rules = "rules" label-suffix="：" label-width="120px">
     <el-form-item :label="form.type === 1 ? '目录名称': '菜单名称'" prop = "title">
       <el-input v-model.trim="form.title" autocomplete="off" placeholder="请输入名称">
@@ -43,7 +43,7 @@
        <el-switch
        v-model="form.status"
        :active-value="1"
-       :inactive-color="2">
+       :inactive-value="2">
        </el-switch>
     </el-form-item>
     <el-form-item>
@@ -101,6 +101,7 @@ export default {
     }
     return {
       dialogFormVisible: false,
+      title: '添加菜单', // 对话框的标题
       form: {...defaultForm},
       rules: {
         title: [
@@ -124,6 +125,12 @@ export default {
     onSubmit () {
       this.$refs.form.validate(valid => {
         if (valid) {
+          // 根据form数据中是否有id属性来判断当前是修改菜单还是添加菜单
+          if (this.form.id && this.form.id > 0) {
+            // 修改
+          } else {
+            // 添加
+          }
           // 处理菜单的添加,把表单的数据提交给接口
           addMenu(this.form).then(() => {
             // 添加成功
