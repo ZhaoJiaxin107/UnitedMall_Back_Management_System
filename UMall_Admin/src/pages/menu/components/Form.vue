@@ -40,6 +40,8 @@
 </template>
 
 <script>
+// 引入接口方法
+import { addMenu } from '@/api/menu'
 const defaultForm = {
   pid: 0, // 上级分类编号, 顶级菜单为0
   title: '', // 菜单名称(必填)
@@ -102,6 +104,20 @@ export default {
       this.$refs.form.validate(valid => {
         if (valid) {
           // 处理菜单的添加,把表单的数据提交给接口
+          addMenu(this.form).then(() => {
+            // 添加成功
+            // 显示添加成功的信息
+            this.$message.success({
+              message: '添加成功',
+              // 关闭对话框
+              onClose: () => {
+                this.dialogFormVisible = false
+              }
+            })
+            // 刷新列表数据
+          }).catch(err => {
+            this.$message.error(err.message)
+          })
         }
       })
     },
