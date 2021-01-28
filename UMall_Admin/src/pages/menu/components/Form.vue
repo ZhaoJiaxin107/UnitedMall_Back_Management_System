@@ -3,7 +3,7 @@
        title: 对话框标题
        visible: 是否显示
    -->
-  <el-dialog title="添加菜单" :visible.sync="dialogFormVisible">
+  <el-dialog title="添加菜单" :visible.sync="dialogFormVisible" @close = "clearForm">
   <el-form :model="form" ref="form" :rules = "rules" label-suffix="：" label-width="120px">
     <el-form-item :label="form.type === 1 ? '目录名称': '菜单名称'" prop = "title">
       <el-input v-model.trim="form.title" autocomplete="off" placeholder="请输入名称">
@@ -40,6 +40,14 @@
 </template>
 
 <script>
+const defaultForm = {
+  pid: 0, // 上级分类编号, 顶级菜单为0
+  title: '', // 菜单名称(必填)
+  icon: '', // 菜单图标
+  type: 1, // 类型 1目录 2菜单
+  url: '', // 菜单地址(如果是菜单才必填)
+  status: 1 // 状态 1正常 2禁用
+}
 export default {
   data () {
     // 自定义验证规则
@@ -74,24 +82,17 @@ export default {
       }
     }
     return {
-      dialogFormVisible: true,
-      form: {
-        pid: 0, // 上级分类编号, 顶级菜单为0
-        title: '', // 菜单名称(必填)
-        icon: '', // 菜单图标
-        type: 1, // 类型 1目录 2菜单
-        url: '', // 菜单地址(如果是菜单才必填)
-        status: 1 // 状态 1正常 2禁用
-      },
+      dialogFormVisible: false,
+      form: {...defaultForm},
       rules: {
         title: [
-          { required: true, message: '请输入名称', trigger: 'blur'}
+          { required: true, message: '请输入名称', trigger: 'blur' }
         ],
         icon: [
-          { validator: checkIcon, trigger: 'blur'}
+          { validator: checkIcon, trigger: 'blur' }
         ],
         url: [
-          { validator: checkUrl, trigger: 'blur'}
+          { validator: checkUrl, trigger: 'blur' }
         ]
       }
     }
@@ -103,6 +104,12 @@ export default {
           // 处理菜单的添加
         }
       })
+    },
+    clearForm () {
+      // 把表单数据还原到初始值
+      this.form = {...defaultForm}
+      // 清空所有的表单验证
+      this.$refs.form.clearValidate()
     }
   }
 }
