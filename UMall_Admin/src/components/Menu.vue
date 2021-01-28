@@ -25,7 +25,7 @@
         <span slot="title">首页</span>
       </el-menu-item>
       <!-- 有下级菜单的菜单项 -->
-      <el-submenu>
+      <el-submenu index="1">
         <template slot="title">
           <i class="el-icon-s-tools"></i>
           <span>系统管理</span>
@@ -38,7 +38,7 @@
         </el-menu-item-group>
       </el-submenu>
 
-       <el-submenu>
+       <el-submenu index="2">
         <template slot="title">
           <i class="el-icon-s-goods"></i>
           <span>商城管理</span>
