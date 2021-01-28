@@ -101,7 +101,7 @@ export default {
     onSubmit () {
       this.$refs.form.validate(valid => {
         if (valid) {
-          // 处理菜单的添加
+          // 处理菜单的添加,把表单的数据提交给接口
         }
       })
     },
