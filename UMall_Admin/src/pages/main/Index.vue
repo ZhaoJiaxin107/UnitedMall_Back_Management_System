@@ -8,6 +8,12 @@
        <u-menu />
      </el-aside>
      <el-main>
+       <!-- 面包屑 -->
+       <el-breadcrumb separator="/">
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <!-- 当前路由的meta的标题 -->
+        <el-breadcrumb-item>{{$route.meta.title || ''}}</el-breadcrumb-item>
+      </el-breadcrumb>
        <!-- 嵌套路由 -->
        <router-view />
      </el-main>
@@ -27,5 +33,8 @@ export default {
 </script>
 
 <style scoped>
-
+.el-breadcrumb {
+  margin-bottom: 20px;
+  font-size: 14px;
+}
 </style>
