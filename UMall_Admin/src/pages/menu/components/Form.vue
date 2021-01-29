@@ -57,7 +57,7 @@
 <script>
 import { mapGetters } from 'vuex'
 // 引入接口方法
-import { addMenu } from '@/api/menu'
+import { addMenu, updateMenu } from '@/api/menu'
 const defaultForm = {
   pid: 0, // 上级分类编号, 顶级菜单为0
   title: '', // 菜单名称(必填)
@@ -150,6 +150,7 @@ export default {
         }
       })
     },
+
     clearForm () {
       // 把表单数据还原到初始值
       this.form = {...defaultForm}
