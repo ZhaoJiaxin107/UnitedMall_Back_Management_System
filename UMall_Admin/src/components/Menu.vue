@@ -63,7 +63,23 @@ export default {}
 <style scoped>
 .aside {
   background: #3d5f81;
-  height: 100%;
+  height: 570px;
+  overflow-y: scroll;
+  overflow-x:hidden;
+}
+.aside::-webkit-scrollbar{
+  width:8px;
+  height: 8px;
+}
+.aside::-webkit-scrollbar-track {
+  -webhit-box-shadow: inset 0 0 5px transparent;
+  border-radius:0;
+  background:transparent;
+}
+.content::-webkit-scrollbar-thumb {
+  border-radius:5px;
+  -webkit-box-shadow:inset 0 0 5px #0e1124;
+  background:#0e1124;
 }
 .el-menu {
   border-right: none;

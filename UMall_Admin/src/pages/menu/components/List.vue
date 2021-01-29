@@ -12,6 +12,7 @@
     style="width: 100%;margin: 20px 0;"
     row-key="id"
     border
+    height="400"
     default-expand-all
     :tree-props="{children: 'children'}">
     <!-- el-table-column:表格的列组件
