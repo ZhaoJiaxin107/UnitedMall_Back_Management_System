@@ -128,26 +128,47 @@ export default {
           // 根据form数据中是否有id属性来判断当前是修改菜单还是添加菜单
           if (this.form.id && this.form.id > 0) {
             // 修改
+            this.updateMenu()
           } else {
             // 添加
-          }
-          // 处理菜单的添加,把表单的数据提交给接口
-          addMenu(this.form).then(() => {
-            // 添加成功
-            // 显示添加成功的信息
-            this.$message.success({
-              message: '添加成功',
-              // 关闭对话框
-              onClose: () => {
-                this.dialogFormVisible = false
-              }
-            })
-            // 刷新列表数据
-            this.$store.dispatch('menu/getMenuList')
-          }).catch(err => {
-            this.$message.error(err.message)
-          })
+            this.addMenu()
+          }     
         }
+      })
+    },
+    updateMenu () {
+      updateMenu(this.form).then(() => {
+        // 添加成功
+        // 显示添加成功的信息
+        this.$message.success({
+          message: '修改成功',
+          // 关闭对话框
+          onClose: () => {
+            this.dialogFormVisible = false
+          }
+        })
+        // 刷新列表数据
+        this.$store.dispatch('menu/getMenuList')
+      }).catch(err => {
+        this.$message.error(err.message)
+      })
+    },
+    addMenu () {
+      // 处理菜单的添加,把表单的数据提交给接口
+      addMenu(this.form).then(() => {
+        // 添加成功
+        // 显示添加成功的信息
+        this.$message.success({
+          message: '添加成功',
+          // 关闭对话框
+          onClose: () => {
+            this.dialogFormVisible = false
+          }
+        })
+        // 刷新列表数据
+        this.$store.dispatch('menu/getMenuList')
+      }).catch(err => {
+        this.$message.error(err.message)
       })
     },
 
