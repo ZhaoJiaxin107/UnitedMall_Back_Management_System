@@ -83,7 +83,9 @@
 <script>
 import { mapGetters } from 'vuex'
 // 引入接口方法
-import { addMenu, updateMenu } from '@/api/menu'
+// 导出所有的非default内容
+// import { addMenu, updateMenu } from '@/api/menu'
+import * as model from '@/api/menu'
 const defaultForm = {
   pid: 0, // 上级分类编号, 顶级菜单为0
   title: '', // 菜单名称(必填)
@@ -148,15 +150,15 @@ export default {
           // 根据form数据中是否有id属性来判断当前是修改菜单还是添加菜单
           if (this.form.id && this.form.id > 0) {
             // 修改
-            this.updateMenu()
+            this.editMenu('updateMenu')
           } else {
             // 添加
-            this.addMenu()
+            this.editMenu()
           }
         }
       })
     },
-    updateMenu () {
+    /* updateMenu () {
       updateMenu(this.form)
         .then(() => {
           // 修改成功
@@ -194,8 +196,27 @@ export default {
         .catch((err) => {
           this.$message.error(err.message)
         })
+    }, */
+    editMenu (method = 'addMenu') {
+      // 处理菜单的添加,把表单的数据提交给接口
+      model[method](this.form)
+        .then(() => {
+          // 添加成功
+          // 显示添加成功的信息
+          this.$message.success({
+            message: method === 'addMenu' ? '添加成功' : '修改成功',
+            // 关闭对话框
+            onClose: () => {
+              this.dialogFormVisible = false
+            }
+          })
+          // 刷新列表数据
+          this.$store.dispatch('menu/getMenuList')
+        })
+        .catch((err) => {
+          this.$message.error(err.message)
+        })
     },
-
     clearForm () {
       // 把表单数据还原到初始值
       this.form = { ...defaultForm }
