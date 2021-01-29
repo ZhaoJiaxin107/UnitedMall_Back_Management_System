@@ -13,6 +13,10 @@ export const updateMenu = (data) => {
   }
   return http.post('/menuedit', data)
 }
+// 删除菜单
+export const deleteMenu = (id) => {
+  return http.post('/menudelete', { id })
+}
 // 获取菜单数据
 export const getMenuList = (istree = true) => {
   // istree是否需要返回树形结构, 是-true, 否-不传

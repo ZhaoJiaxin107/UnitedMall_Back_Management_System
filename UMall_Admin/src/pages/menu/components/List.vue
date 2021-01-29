@@ -57,6 +57,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { deleteMenu } from '@/api/menu'
 export default {
   computed: {
     ...mapState({
@@ -77,6 +78,27 @@ export default {
       // element-ui的弹出框this.$comfirm(显示的信息[,标题,其他的配置项目])
       this.$confirm('确定要删除吗?', '提示', { type: 'error' }).then(() => {
         // 完成删除功能
+        // 如果有下级菜单，就不允许删除
+        if (Reflect.has(data, 'children') && data.children.length > 0) {
+          this.$message.error('有下级菜单, 不允许删除')
+          return
+        }
+        // 调用接口删除菜单
+        // console.log('删除')
+        deleteMenu(data.id).then(() => {
+          // 刷新列表数据
+          this.$message.success({
+            message: '删除成功',
+            onClose: () => {
+              // 刷新列表数据
+              this.$store.dispatch('menu/getMenuList')
+            }
+          })
+        }).catch(err => {
+          this.$message.error(err.message)
+        })
+        // 调用接口删除菜单
+        // 刷新列表数据
       }).catch(() => {})
     }
   }
