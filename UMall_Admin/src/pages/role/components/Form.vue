@@ -51,6 +51,8 @@
 
 <script>
 import { mapState } from 'vuex'
+// 导出角色管理的接口文件
+import * as model from '@/api/role'
 const defaultForm = {
   rolename: '', // 角色名称
   menus: '', // 角色选择的菜单
@@ -59,6 +61,9 @@ const defaultForm = {
 export default {
   data () {
     const checkMeuns = (rule, value, callback) => {
+      // 获取树形控件的数据
+      // 获取选中的节点的key: this.$refs.tree.getCheckedKeys()
+      // 获取班选中的节点key: this.$refs.tree.getHalfCheckedKeys()
       const selectMenus = [...this.$refs.tree.getCheckedKeys(), ...this.$refs.tree.getHalfCheckedKeys()]
       if (selectMenus.length === 0) {
         // 还原表单数据中的菜单
@@ -73,7 +78,7 @@ export default {
     }
     return {
       title: '', // 对话框的标题
-      dialogFormVisible: true, // 是否显示对话框
+      dialogFormVisible: false, // 是否显示对话框
       form: {...defaultForm}, // 复制一份默认数据
       rules: {
         rolename: [
@@ -99,21 +104,47 @@ export default {
   },
   methods: {
     clearForm () {
-    // 关闭对话框
-    // 还原表单数据
-    // 清除表单验证
+      // 关闭对话框
+      // 还原表单数据
+      this.form = {...defaultForm}
+      // 清除表单验证
+      this.$refs.form.clearValidate()
     },
     onSubmit () {
       this.$refs.form.validate(valid => {
         if (valid) {
-          console.log(this.form)
-          // 获取树形控件的数据
-          // 获取选中的节点的key: this.$refs.tree.getCheckedKeys()
-          // 获取班选中的节点key: this.$refs.tree.getHalfCheckedKeys()
-          console.log(this.$refs.tree.getCheckedKeys(), this.$refs.tree.getHalfCheckedKeys())
+          // console.log(this.form)
           // 处理数据
+          // 根据form数据中是否有id属性来判断当前是修改菜单还是添加菜单
+          if (this.form.id && this.form.id > 0) {
+            // 修改
+            this.editRole('updateRole')
+          } else {
+            // 添加
+            this.editRole()
+          }
         }
       })
+    },
+    editRole (method = 'addRole') {
+      // 处理菜单的添加,把表单的数据提交给接口
+      model[method](this.form)
+        .then(() => {
+          // 添加成功
+          // 显示添加成功的信息
+          this.$message.success({
+            message: method === 'addRole' ? '添加成功' : '修改成功',
+            // 关闭对话框
+            onClose: () => {
+              this.dialogFormVisible = false
+            }
+          })
+          // 刷新列表数据
+          // this.$store.dispatch('menu/getMenuList')
+        })
+        .catch((err) => {
+          this.$message.error(err.message)
+        })
     }
   }
 }

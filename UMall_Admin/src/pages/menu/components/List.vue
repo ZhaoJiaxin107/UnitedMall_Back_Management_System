@@ -66,7 +66,9 @@ export default {
     })
   },
   mounted () {
-    this.$store.dispatch('menu/getMenuList')
+    if (this.list.length === 0) {
+      this.$store.dispatch('menu/getMenuList')
+    }
   },
   methods: {
     onEdit (data) {
