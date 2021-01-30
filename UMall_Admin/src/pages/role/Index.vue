@@ -22,7 +22,7 @@ export default {
       this.$refs.form.title = '添加角色'
     },
     showEditForm (data) {
-      console.log(data)
+      // console.log(data)
       // 显示菜单对话框
       this.$refs.form.dialogFormVisible = true
       // 修改对话框的标题

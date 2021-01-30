@@ -32,7 +32,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { deleteMenu } from '@/api/menu'
+import { deleteRole } from '@/api/role'
 export default {
   computed: {
     ...mapState({
@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     onEdit (data) {
-      console.log('on edit...', data)
+      // console.log('on edit...', data)
       // 触发编辑按钮
       // 通知父组件显示编辑菜单的对话框, 把当前编辑的数据传递过去
       this.$emit('edit', data)
@@ -55,14 +55,9 @@ export default {
       // element-ui的弹出框this.$comfirm(显示的信息[,标题,其他的配置项目])
       this.$confirm('确定要删除吗?', '提示', { type: 'error' }).then(() => {
         // 完成删除功能
-        // 如果有下级菜单，就不允许删除
-        if (Reflect.has(data, 'children') && data.children.length > 0) {
-          this.$message.error('有下级菜单, 不允许删除')
-          return
-        }
-        // 调用接口删除菜单
+        // 调用接口删除角色
         // console.log('删除')
-        deleteMenu(data.id).then(() => {
+        deleteRole(data.id).then(() => {
           // 刷新列表数据
           this.$message.success({
             message: '删除成功',

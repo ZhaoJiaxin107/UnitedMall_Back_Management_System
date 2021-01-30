@@ -19,6 +19,6 @@ export const updateRole = (data) => {
   return http.post('/roleedit', data)
 }
 // 删除菜单
-export const deleteMenu = (id) => {
-  return http.post('/menudelete', { id })
+export const deleteRole = (id) => {
+  return http.post('/roledelete', { id })
 }

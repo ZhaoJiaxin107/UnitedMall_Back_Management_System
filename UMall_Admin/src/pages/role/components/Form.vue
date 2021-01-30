@@ -21,6 +21,7 @@
         node-key: node的key 对应的菜单数据的编号
         props 节点配置 [children(下级)：菜单数据中对应的下级名称, label:菜单数据中的标题]
         default-expand-all 是否展开所有节点
+        check-strictly 是否联动选择(选择父节点的时候是否选中所有的子节点)
          -->
         <el-tree
          :data = "menuList"
@@ -29,6 +30,7 @@
          default-expand-all
          ref="tree"
          :props="{children:'children',label:'title'}"
+         :check-strictly="checkStrictly"
         >
         </el-tree>
         </el-form-item>
@@ -87,7 +89,9 @@ export default {
         menus: [
           { validator: checkMeuns, trigger: 'change' }
         ]
-      }
+      },
+      // 在显示复选框的情况下，是否严格的遵循父子不互相关联的做法，默认为 false
+      checkStrictly: false
     }
   },
   computed: {
@@ -107,6 +111,8 @@ export default {
       // 关闭对话框
       // 还原表单数据
       this.form = {...defaultForm}
+      // 清空树形数据
+      this.$refs.tree.setCheckedKeys([])
       // 清除表单验证
       this.$refs.form.clearValidate()
     },
@@ -151,9 +157,12 @@ export default {
       this.form = {...data}
       // 给树形控件赋值
       const keys = data.menus.split(',')
+      // 在渲染树形组件之前关闭父子节点的联动选择
+      this.checkStrictly = true
       this.$nextTick(() => {
         // 在本次dom完成渲染之后触发
         this.$refs.tree.setCheckedKeys(keys) // 参数必须是数组
+        this.checkStrictly = false // 在赋值之后开启父子节点的联动选择
       })
     }
   }
