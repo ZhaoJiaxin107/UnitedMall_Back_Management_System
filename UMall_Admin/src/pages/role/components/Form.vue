@@ -114,7 +114,9 @@ export default {
       // 清空树形数据
       this.$refs.tree.setCheckedKeys([])
       // 清除表单验证
-      this.$refs.form.clearValidate()
+      this.$nextTick(() => {
+        this.$refs.form.clearValidate()
+      })
     },
     onSubmit () {
       this.$refs.form.validate(valid => {
