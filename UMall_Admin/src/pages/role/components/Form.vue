@@ -14,10 +14,19 @@
             <el-input v-model.trim="form.rolename" placeholder="请输入角色名称"></el-input>
         </el-form-item>
         <el-form-item label="角色权限">
+        <!--
+        树形控件
+        data 要显示的数据
+        show-checkbox 是否显示checkbox数据
+        node-key: node的key 对应的菜单数据的编号
+        props 节点配置 [children(下级)：菜单数据中对应的下级名称, label:菜单数据中的标题]
+        default-expand-all 是否展开所有节点
+         -->
         <el-tree
          :data = "menuList"
          node-key="id"
          show-checkbox
+         default-expand-all
          :props="{children:'children',label:'title'}"
         >
         </el-tree>
@@ -65,7 +74,7 @@ export default {
     })
   },
   mounted () {
-    console.log(this.menuList)
+    // console.log(this.menuList)
     // 判断是否获取过菜单数据, 如果没有则重新获取
     if (this.menuList.length === 0) {
       this.$store.dispatch('menu/getMenuList')
