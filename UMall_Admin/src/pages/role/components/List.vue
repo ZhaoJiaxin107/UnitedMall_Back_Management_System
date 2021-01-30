@@ -46,9 +46,9 @@ export default {
   },
   methods: {
     onEdit (data) {
-    //   console.log('on edit...')
-    // 触发编辑按钮
-    // 通知父组件显示编辑菜单的对话框, 把当前编辑的数据传递过去
+      console.log('on edit...', data)
+      // 触发编辑按钮
+      // 通知父组件显示编辑菜单的对话框, 把当前编辑的数据传递过去
       this.$emit('edit', data)
     },
     onDelete (data) {

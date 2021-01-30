@@ -140,7 +140,7 @@ export default {
             }
           })
           // 刷新列表数据
-          // this.$store.dispatch('menu/getMenuList')
+          this.$store.dispatch('role/getRoleList')
         })
         .catch((err) => {
           this.$message.error(err.message)
