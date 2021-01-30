@@ -19,6 +19,7 @@
         <el-select v-model="form.roleid" placeholder="请选择">
           <!-- 当value与v-model的值相等的时候就选中 -->
           <!-- value与v-model是全等比较 -->
+          <el-option label = "请选择角色" :value="0"></el-option>
           <!-- 循环一级菜单 -->
           <el-option
             v-for="item of roleList"
