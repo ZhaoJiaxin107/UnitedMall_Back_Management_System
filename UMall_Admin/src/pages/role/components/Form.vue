@@ -145,6 +145,16 @@ export default {
         .catch((err) => {
           this.$message.error(err.message)
         })
+    },
+    // 修改的时候设置表单数据
+    setFormData (data) {
+      this.form = {...data}
+      // 给树形控件赋值
+      const keys = data.menus.split(',')
+      this.$nextTick(() => {
+        // 在本次dom完成渲染之后触发
+        this.$refs.tree.setCheckedKeys(keys) // 参数必须是数组
+      })
     }
   }
 }

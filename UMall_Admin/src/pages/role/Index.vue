@@ -28,7 +28,7 @@ export default {
       // 修改对话框的标题
       this.$refs.form.title = '修改角色'
       // 把要编辑的菜单的数据复制给对话框
-      this.$refs.form.form = {...data}
+      this.$refs.form.setFormData(data)
     }
   }
 }

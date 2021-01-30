@@ -93,6 +93,8 @@ export default {
           this.$message.success({
             message: '删除成功',
             onClose: () => {
+              // 关闭对话框
+              this.dialogFormVisible = false
               // 刷新列表数据
               this.$store.dispatch('menu/getMenuList')
             }
