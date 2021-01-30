@@ -13,7 +13,7 @@
         <el-form-item label="角色名称" prop="rolename">
             <el-input v-model.trim="form.rolename" placeholder="请输入角色名称"></el-input>
         </el-form-item>
-        <el-form-item label="角色权限">
+        <el-form-item label="角色权限" prop="menus">
         <!--
         树形控件
         data 要显示的数据
@@ -27,6 +27,7 @@
          node-key="id"
          show-checkbox
          default-expand-all
+         ref="tree"
          :props="{children:'children',label:'title'}"
         >
         </el-tree>
@@ -57,6 +58,19 @@ const defaultForm = {
 }
 export default {
   data () {
+    const checkMeuns = (rule, value, callback) => {
+      const selectMenus = [...this.$refs.tree.getCheckedKeys(), ...this.$refs.tree.getHalfCheckedKeys()]
+      if (selectMenus.length === 0) {
+        // 还原表单数据中的菜单
+        this.form.menus = ''
+        //  没有选择任何菜单
+        callback(new Error('请选择角色权限'))
+      } else {
+        // 把选择的权限复制给表单数据
+        this.form.menus = selectMenus
+        callback()
+      }
+    }
     return {
       title: '', // 对话框的标题
       dialogFormVisible: true, // 是否显示对话框
@@ -64,6 +78,9 @@ export default {
       rules: {
         rolename: [
           { required: true, message: '请输入角色名称', trigger: 'blur' }
+        ],
+        menus: [
+          { validator: checkMeuns, trigger: 'change' }
         ]
       }
     }
@@ -90,6 +107,10 @@ export default {
       this.$refs.form.validate(valid => {
         if (valid) {
           console.log(this.form)
+          // 获取树形控件的数据
+          // 获取选中的节点的key: this.$refs.tree.getCheckedKeys()
+          // 获取班选中的节点key: this.$refs.tree.getHalfCheckedKeys()
+          console.log(this.$refs.tree.getCheckedKeys(), this.$refs.tree.getHalfCheckedKeys())
           // 处理数据
         }
       })
