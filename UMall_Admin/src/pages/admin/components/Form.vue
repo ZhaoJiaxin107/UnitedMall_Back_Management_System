@@ -99,7 +99,7 @@ export default {
       }
     }
     return {
-      dialogFormVisible: true,
+      dialogFormVisible: false,
       title: '', // 对话框的标题
       form: { ...defaultForm },
       rules: {
