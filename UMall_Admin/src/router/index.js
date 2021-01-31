@@ -21,12 +21,22 @@ router.beforeEach((to, from, next) => {
     next()
   } else {
     // 跳转的不是登录页面，需要登录以后才能够访问到
-    const userInfo = sessionStorage.getItem('user')
+    let userInfo = sessionStorage.getItem('user')
     if (!userInfo) {
       // 没有登录，则跳转登录页面
       next('/login')
     } else {
-      next()
+      // 判断登录用户是否拥有对应的权限
+      userInfo = JSON.parse(userInfo)
+      // 首页是所有用户都能访问
+      userInfo.menus_url.push('/', '/statistics')
+      if (userInfo.menus_url.includes(to.path)) {
+        // userInfo.menus_url就是当前登录用户能够访问的路由path
+        next()
+      } else {
+        // 没有权限访问时自动跳转到首页
+        next('/')
+      }
     }
   }
 })

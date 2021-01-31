@@ -25,39 +25,39 @@
         <span slot="title">首页</span>
       </el-menu-item>
       <!-- 有下级菜单的菜单项 -->
-      <el-submenu index="1">
-        <template slot="title">
-          <i class="el-icon-s-tools"></i>
-          <span>系统管理</span>
-        </template>
-        <!-- 一组菜单项 -->
-        <el-menu-item-group>
-          <el-menu-item index="/menu">菜单管理</el-menu-item>
-          <el-menu-item index="/role">角色管理</el-menu-item>
-          <el-menu-item index="/admin">管理员管理</el-menu-item>
-        </el-menu-item-group>
-      </el-submenu>
-
-       <el-submenu index="2">
-        <template slot="title">
-          <i class="el-icon-s-goods"></i>
-          <span>商城管理</span>
-        </template>
-        <!-- 一组菜单项 -->
-        <el-menu-item-group>
-          <el-menu-item index="/category">商品分类</el-menu-item>
-          <el-menu-item index="/specs">商品规格</el-menu-item>
-          <el-menu-item index="/goods">商品管理</el-menu-item>
-          <el-menu-item index="/seckill">秒杀活动</el-menu-item>
-          <el-menu-item index="/banner">轮播图管理</el-menu-item>
-        </el-menu-item-group>
-      </el-submenu>
+      <template v-for="(menu, index) of menuList">
+        <!-- 有下级菜单 -->
+        <el-submenu :index = "''+index" :key = "menu.id" v-if="menu.children && menu.children.length > 0">
+          <!-- 一级菜单名称 -->
+          <template slot="title">
+            <i v-if = "menu.icon!=''" :class="menu.icon"></i>
+            <span>{{menu.title}}</span>
+          </template>
+          <!-- 二级菜单项 -->
+          <el-menu-item-group>
+            <el-menu-item v-for = "item of menu.children" :key="item.id" :index="item.url">
+              <span slot="title">{{item.title}}</span>
+            </el-menu-item>
+          </el-menu-item-group>
+        </el-submenu>
+      </template>
     </el-menu>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  data () {
+    return {
+      menuList: []
+    }
+  },
+  mounted () {
+    const userInfo = JSON.parse(sessionStorage.getItem('user'))
+    this.menuList = userInfo.menus || []
+    console.log(userInfo)
+  }
+}
 </script>
 
 <style scoped>
