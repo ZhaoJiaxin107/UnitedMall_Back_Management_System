@@ -22,13 +22,13 @@ export default {
       this.$refs.form.title = '添加管理员'
     },
     showEditForm (data) {
-      console.log(data)
+      // console.log(data)
       // 显示菜单对话框
       this.$refs.form.dialogFormVisible = true
       // 修改对话框的标题
       this.$refs.form.title = '修改管理员'
       // 把要编辑的菜单的数据复制给对话框
-      this.$refs.form.form = {...data}
+      this.$refs.form.setFormData(data)
     }
   }
 }

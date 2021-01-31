@@ -156,8 +156,12 @@ export default {
               this.dialogFormVisible = false
             }
           })
+          // 添加时重新获取总数量
+          if (method === 'addAdmin') {
+            this.$store.dispatch('admin/getAdminTotal')
+          }
           // 刷新列表数据
-          // this.$store.dispatch('menu/getMenuList')
+          this.$store.dispatch('admin/getAdminList')
         })
         .catch((err) => {
           this.$message.error(err.message)
@@ -171,6 +175,13 @@ export default {
       this.$nextTick(() => {
         this.$refs.form.clearValidate()
       })
+    },
+    // 修改时设置表单数据
+    setFormData (data) {
+      // 修改时把密码清空
+      const editData = {...data} // 复制一份传入的管理员数据
+      editData.password = ''
+      this.form = editData
     }
   }
 }
