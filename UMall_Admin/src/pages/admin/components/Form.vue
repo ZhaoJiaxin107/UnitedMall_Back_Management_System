@@ -15,7 +15,7 @@
       label-suffix="："
       label-width="120px"
     >
-      <el-form-item label="所属角色">
+      <el-form-item label="所属角色" prop = "roleid">
         <el-select v-model="form.roleid" placeholder="请选择">
           <!-- 当value与v-model的值相等的时候就选中 -->
           <!-- value与v-model是全等比较 -->
@@ -31,7 +31,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="用户名称">
+      <el-form-item label="用户名称" prop = "username">
         <el-input
           v-model="form.username"
           autocomplete="off"
@@ -39,11 +39,12 @@
         >
         </el-input>
       </el-form-item>
-      <el-form-item label="密码">
+      <el-form-item label="密码" prop = "password">
         <el-input
+          show-password
           v-model.trim="form.password"
           autocomplete="off"
-          placeholder="请输入密码"
+          :placeholder="form.id > 0 ? '不填代表不修改密码' : '请输入密码'"
         >
         </el-input>
       </el-form-item>
@@ -77,11 +78,41 @@ const defaultForm = {
 }
 export default {
   data () {
+    const checkRole = (rule, value, callback) => {
+      // 如果值不为0就代表通过
+      if (value === 0) {
+        callback(new Error('请选择角色'))
+      } else {
+        callback()
+      }
+    }
+    const checkPassword = (rule, value, callback) => {
+      // 添加时必填，修改时可以不填
+      if (this.form.id > 0) {
+        callback()
+      } else {
+        if (value === '') {
+          callback(new Error('请输入密码'))
+        } else {
+          callback()
+        }
+      }
+    }
     return {
       dialogFormVisible: true,
       title: '', // 对话框的标题
       form: { ...defaultForm },
       rules: {
+        // 如果没有使用自定义验证, 那么规划的属性就必须在表单的数据中存在
+        roleid: [
+          { validator: checkRole, trigger: 'change' }
+        ],
+        username: [
+          { required: true, message: '请输入账号', trigger: 'blur' }
+        ],
+        password: [
+          { validator: checkPassword, trigger: 'blur' }
+        ]
       }
     }
   },
