@@ -51,6 +51,7 @@
           list-type="picture-card"
           :limit="imgLimit"
           :file-list="fileList"
+          accept="image/png, image/gif, image/jpeg"
           :on-change="uploadImg"
           :auto-upload="false">
           <i slot="default" class="el-icon-plus"></i>
@@ -107,7 +108,7 @@ import { mapGetters } from 'vuex'
 // 引入接口方法
 // 导出所有的非default内容
 // import { addMenu, updateMenu } from '@/api/menu'
-import * as model from '@/api/menu'
+import * as model from '@/api/category'
 const defaultForm = {
   pid: 0, // 上级分类编号, 顶级菜单为0
   catename: '', // 分类的名称
@@ -125,7 +126,7 @@ export default {
           { required: true, message: '请输入分类名称', trigger: 'blur' }
         ]
       },
-      imgLimit: 2,
+      imgLimit: 1,
       fileList: [], // 选择的文件列表
       dialogVisible: false, // 是否展示大图片
       dialogImageUrl: '', //  大图片的地址
@@ -141,12 +142,31 @@ export default {
     // 上传图片
     uploadImg (file, fileList) {
       // console.log(file, fileList)
+      // 对大小和类型进行限制
+      const allowType = ['image/png', 'image/gif', 'image/jpeg']
+      if (!allowType.includes(file.raw.type)) {
+        // 选择了不允许的类型
+        this.$message.error('不是正确的图片格式')
+        // 移除当前选择的文件, 即过滤出不是当前的图片地址的文件
+        this.fileList = this.fileList.filter(item => item.url !== file.url)
+        return
+      }
+      const allowMaxSize = 1024 * 1024
+      if (file.size > allowMaxSize) {
+        // 文件超过允许的大小
+        this.$message.error('文件超过允许的大小')
+        // 移除当前选择的文件, 即过滤出不是当前的图片地址的文件
+        this.fileList = this.fileList.filter(item => item.url !== file.url)
+        return
+      }
       // 当选择的文件的列表等于允许的最大数量时
       // 隐藏选择图片的按钮
       if (fileList.length === this.imgLimit) {
         this.hideUploadBtn = true
       }
       this.fileList = fileList
+      // 把文件的资源保存到表单数据中
+      this.form.img = file.raw
     },
     // 图片预览(展示大图)
     handlePictureCardPreview (file) {
@@ -171,29 +191,35 @@ export default {
           // 根据form数据中是否有id属性来判断当前是修改菜单还是添加菜单
           if (this.form.id && this.form.id > 0) {
             // 修改
-            this.editMenu('updateMenu')
+            // this.editCategory('updateCategory')
           } else {
             // 添加
-            this.editMenu()
+            this.editCategory()
+            // console.log(this.form)
           }
         }
       })
     },
-    editMenu (method = 'addMenu') {
+    editCategory (method = 'addCategory') {
+      // 因为有文件所以需要用FormData来存储和传递数据
+      const data = new FormData() // js的原生对象
+      for (let k in this.form) {
+        data.append(k, this.form[k]) // 将数据添加到FormData中
+      }
       // 处理菜单的添加,把表单的数据提交给接口
-      model[method](this.form)
+      model[method](data)
         .then(() => {
           // 添加成功
           // 显示添加成功的信息
           this.$message.success({
-            message: method === 'addMenu' ? '添加成功' : '修改成功',
+            message: method === 'addCategory' ? '添加成功' : '修改成功',
             // 关闭对话框
             onClose: () => {
               this.dialogFormVisible = false
             }
           })
           // 刷新列表数据
-          this.$store.dispatch('menu/getMenuList')
+          // this.$store.dispatch('menu/getMenuList')
         })
         .catch((err) => {
           this.$message.error(err.message)
