@@ -42,8 +42,17 @@
         <!-- 上传图片
             list-type:文件列表的类型 text/picture/picture-card
             auto-upload: 是否自动上传
+            limit 允许上传的文件数量
+            on-change 文件状态改变时的钩子, 添加文件、上传成功和上传失败时都会被调用
         -->
-        <el-upload action="#" list-type="picture-card" :auto-upload="false">
+        <el-upload
+          :class = "{upload: hideUploadBtn}"
+          action="#"
+          list-type="picture-card"
+          :limit="imgLimit"
+          :file-list="fileList"
+          :on-change="uploadImg"
+          :auto-upload="false">
           <i slot="default" class="el-icon-plus"></i>
           <div slot="file" slot-scope="{ file }">
             <!-- 预览的小图 -->
@@ -62,7 +71,6 @@
               </span>
               <!-- 删除图片的按钮 -->
               <span
-                v-if="!disabled"
                 class="el-upload-list__item-delete"
                 @click="handleRemove(file)"
               >
@@ -71,8 +79,10 @@
             </span>
           </div>
         </el-upload>
-        <!-- 展示大图片的对话框 -->
-        <el-dialog :visible.sync="dialogVisible">
+        <!-- 展示大图片的对话框
+             append-to-body: 是否挂载在body上
+        -->
+        <el-dialog :visible.sync="dialogVisible" :append-to-body = "true">
           <img width="100%" :src="dialogImageUrl" alt="" />
         </el-dialog>
       </el-form-item>
@@ -115,8 +125,11 @@ export default {
           { required: true, message: '请输入分类名称', trigger: 'blur' }
         ]
       },
+      imgLimit: 2,
+      fileList: [], // 选择的文件列表
       dialogVisible: false, // 是否展示大图片
-      dialogImageUrl: '' //  大图片的地址
+      dialogImageUrl: '', //  大图片的地址
+      hideUploadBtn: false // 是否隐藏选择图片的按钮
     }
   },
   computed: {
@@ -125,12 +138,32 @@ export default {
     })
   },
   methods: {
+    // 上传图片
+    uploadImg (file, fileList) {
+      // console.log(file, fileList)
+      // 当选择的文件的列表等于允许的最大数量时
+      // 隐藏选择图片的按钮
+      if (fileList.length === this.imgLimit) {
+        this.hideUploadBtn = true
+      }
+      this.fileList = fileList
+    },
     // 图片预览(展示大图)
     handlePictureCardPreview (file) {
-      console.log(file)
+      // console.log(file)
+      // 把file的链接赋值给大图片的src
+      this.dialogImageUrl = file.url
+      // 显示大图的对话框
+      this.dialogVisible = true
     },
     handleRemove (file) {
-      console.log(file)
+      console.log(file, this.fileList)
+      // this.fileList = []
+      // 从filelist中删除选择的图片
+      this.fileList = this.fileList.filter(item =>
+        item.url !== file.url)
+      // 显示选择图片的按钮
+      this.hideUploadBtn = false
     },
     onSubmit () {
       this.$refs.form.validate((valid) => {
@@ -177,4 +210,12 @@ export default {
 </script>
 
 <style>
+/*
+.upload /deep/ .el-upload
+.upload >>> .el-upload (可能不通用)
+让el-upload的样式变成全局的
+*/
+.upload /deep/ .el-upload {
+  display:none !important
+}
 </style>
