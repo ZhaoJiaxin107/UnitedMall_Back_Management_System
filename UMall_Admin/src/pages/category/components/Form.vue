@@ -130,7 +130,8 @@ export default {
       fileList: [], // 选择的文件列表
       dialogVisible: false, // 是否展示大图片
       dialogImageUrl: '', //  大图片的地址
-      hideUploadBtn: false // 是否隐藏选择图片的按钮
+      hideUploadBtn: false, // 是否隐藏选择图片的按钮
+      editDefaultImg: '' // 存储修改时传入的图片
     }
   },
   computed: {
@@ -184,6 +185,8 @@ export default {
         item.url !== file.url)
       // 显示选择图片的按钮
       this.hideUploadBtn = false
+      // 如果是添加清空表单的图片数据, 如果是修改要还原修改之前的数据
+      this.form.img = this.editDefaultImg
     },
     onSubmit () {
       this.$refs.form.validate((valid) => {
@@ -219,7 +222,7 @@ export default {
             }
           })
           // 刷新列表数据
-          // this.$store.dispatch('menu/getMenuList')
+          this.$store.dispatch('category/getCategoryList')
         })
         .catch((err) => {
           this.$message.error(err.message)
@@ -230,12 +233,14 @@ export default {
       this.form = { ...defaultForm }
       // 清空所有的表单验证
       this.$refs.form.clearValidate()
+      // 还原上传组件的数据
+      // this.hideUploadBtn = false
+      // this.editDefaultImg = ''
+      // this.fileList = []
     },
     // 修改时设置表单数据
     setFormData (data) {
-      this.fileList.push({
-        url: this.recombinationImg(data.img)
-      })
+      this.editDefaultImg = data.img
       this.form = {...data}
     }
   }
