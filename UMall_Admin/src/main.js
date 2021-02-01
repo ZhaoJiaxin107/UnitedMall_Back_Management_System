@@ -6,6 +6,8 @@ import 'element-ui/lib/theme-chalk/index.css'
 import App from './App'
 import router from './router'
 import store from './store'
+import './filters/img.js' // 全局过滤器
+import './utils/function.js' // 公共方法
 // 引入reset.css
 import './assets/css/reset.css'
 

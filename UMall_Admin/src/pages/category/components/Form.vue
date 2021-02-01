@@ -118,7 +118,7 @@ const defaultForm = {
 export default {
   data () {
     return {
-      dialogFormVisible: true,
+      dialogFormVisible: false,
       title: '', // 对话框的标题
       form: { ...defaultForm },
       rules: {
@@ -141,7 +141,7 @@ export default {
   methods: {
     // 上传图片
     uploadImg (file, fileList) {
-      // console.log(file, fileList)
+      console.log(file, fileList)
       // 对大小和类型进行限制
       const allowType = ['image/png', 'image/gif', 'image/jpeg']
       if (!allowType.includes(file.raw.type)) {
@@ -230,6 +230,13 @@ export default {
       this.form = { ...defaultForm }
       // 清空所有的表单验证
       this.$refs.form.clearValidate()
+    },
+    // 修改时设置表单数据
+    setFormData (data) {
+      this.fileList.push({
+        url: this.recombinationImg(data.img)
+      })
+      this.form = {...data}
     }
   }
 }

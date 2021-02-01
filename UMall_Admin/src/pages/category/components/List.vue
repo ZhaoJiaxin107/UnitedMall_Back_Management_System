@@ -20,24 +20,14 @@
         label:表头
          -->
     <el-table-column
-      prop="title"
-      label="菜单名称">
+      prop="catename"
+      label="分类名称">
     </el-table-column>
     <el-table-column
-      label="菜单类型">
+      label="图片">
     <template #default = "props">
-      <el-tag>{{props.row.type === 1 ? '目录':'菜单'}}</el-tag>
+      <img v-if="props.row.img !== ''" :src="props.row.img | recombinationImg" height = "80"/>
     </template>
-    </el-table-column>
-    <el-table-column
-      label="菜单图标">
-    <template #default = "props">
-      <i v-if="props.row.icon !== ''" :class="props.row.icon"></i>
-    </template>
-    </el-table-column>
-    <el-table-column
-      prop="url"
-      label="菜单地址">
     </el-table-column>
     <el-table-column
       label="状态">
@@ -62,12 +52,12 @@ import { deleteMenu } from '@/api/menu'
 export default {
   computed: {
     ...mapState({
-      list: state => state.menu.list
+      list: state => state.category.list
     })
   },
   mounted () {
     if (this.list.length === 0) {
-      this.$store.dispatch('menu/getMenuList')
+      this.$store.dispatch('category/getCategoryList')
     }
   },
   methods: {
