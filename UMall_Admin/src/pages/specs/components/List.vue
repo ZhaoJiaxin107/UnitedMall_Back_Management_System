@@ -2,7 +2,7 @@
 <div>
   <el-table
     :data = "list"
-    style="width: 100%;margin: 20px 0;"
+    style="width: 100%; margin: 20px 0;"
     row-key="id"
     border>
     <!-- el-table-column:表格的列组件
@@ -10,12 +10,15 @@
         label:表头
          -->
     <el-table-column
-      prop="username"
-      label="角色名称">
+      prop="specsname"
+      label="规格名称">
     </el-table-column>
      <el-table-column
-      prop="rolename"
-      label="所属角色">
+      prop="attrs"
+      label="规格属性">
+    <template #default = "props">
+      <el-tag v-for = "item of props.row.attrs" type="info" :key = "item" style="margin-right: 5px">{{item}}</el-tag>
+    </template>
     </el-table-column>
     <el-table-column
       label="状态">
@@ -54,27 +57,27 @@
 
 <script>
 import { mapState } from 'vuex'
-import { deleteAdmin } from '@/api/admin'
+import { deleteSpecs } from '@/api/specs'
 export default {
   computed: {
     ...mapState({
-      list: state => state.admin.list,
-      size: state => state.admin.size,
-      page: state => state.admin.page,
-      total: state => state.admin.total
+      list: state => state.specs.list,
+      size: state => state.specs.size,
+      page: state => state.specs.page,
+      total: state => state.specs.total
     })
   },
   mounted () {
-    this.$store.dispatch('admin/getAdminList')
-    this.$store.dispatch('admin/getAdminTotal')
+    this.$store.dispatch('specs/getSpecsList')
+    this.$store.dispatch('specs/getSpecsTotal')
   },
   methods: {
     onCurrentChange (page) {
       // console.log(page)
       // 更改vuex中的当前页
-      this.$store.commit('admin/SET_PAGE', page)
+      this.$store.commit('specs/SET_PAGE', page)
       // 重新获取当前页的管理员数据
-      this.$store.dispatch('admin/getAdminList')
+      this.$store.dispatch('specs/getSpecsList')
     },
     onEdit (data) {
       // 触发编辑按钮
@@ -88,7 +91,7 @@ export default {
         // 完成删除功能
         // 调用接口删除角色
         // console.log('删除')
-        deleteAdmin(data.uid).then(() => {
+        deleteSpecs(data.id).then(() => {
           // 刷新列表数据
           this.$message.success({
             message: '删除成功',
@@ -96,7 +99,7 @@ export default {
               // 关闭对话框
               this.dialogFormVisible = false
               // 重新获取总数量
-              this.$store.dispatch('admin/getAdminTotal')
+              this.$store.dispatch('specs/getSpecsTotal')
               // 如果当前页的数据已经全部删除, 就修改page
               if (this.list.length === 1) {
                 let page = 0
@@ -105,10 +108,10 @@ export default {
                 } else {
                   page = this.page - 1
                 }
-                this.$store.commit('admin/SET_PAGE', page)
+                this.$store.commit('specs/SET_PAGE', page)
               }
               // 刷新列表数据
-              this.$store.dispatch('admin/getAdminList')
+              this.$store.dispatch('specs/getSpecsList')
             }
           })
         }).catch(err => {

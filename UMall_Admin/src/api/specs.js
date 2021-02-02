@@ -13,3 +13,23 @@ export const updateSpecs = (data) => {
   }
   return http.post('/specsedit')
 }
+
+// 分页获取规格数据
+export const getPageSpecs = (page = 1, size = 1) => {
+  return http.get('/specslist', {
+    params: {
+      page,
+      size
+    }
+  })
+}
+
+// 获取规格总数量
+export const getSpecsTotal = () => {
+  return http.get('/specscount')
+}
+
+// 删除规格属性
+export const deleteSpecs = (id) => {
+  return http.post('/specsdelete', { id })
+}

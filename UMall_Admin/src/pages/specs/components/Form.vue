@@ -54,8 +54,7 @@
 <script>
 // 引入接口方法
 // 导出所有的非default内容
-// import { addMenu, updateMenu } from '@/api/menu'
-import * as model from '@/api/admin'
+import * as model from '@/api/specs'
 const defaultForm = {
   specsname: '', // 规格名称
   attrs: '', // 规格属性
@@ -96,7 +95,13 @@ export default {
         }
       })
     },
-    editAdmin (method = 'addSpecs') {
+    editSpecs (method = 'addSpecs') {
+      // 从规格数属性中过滤出不为空的数据, 然后要转换为字符串
+      this.form.attrs = this.attrList.filter(item => item.value !== '').map(item => item.value).join(',')
+      if (this.form.attrs === '') {
+        this.$message.error('请输入规格属性')
+        return
+      }
       // 处理菜单的添加,把表单的数据提交给接口
       model[method](this.form)
         .then(() => {
@@ -111,10 +116,10 @@ export default {
           })
           // 添加时重新获取总数量
           if (method === 'addSpecs') {
-            this.$store.dispatch('admin/getAdminTotal')
+            this.$store.dispatch('specs/getSpecsTotal')
           }
           // 刷新列表数据
-          this.$store.dispatch('admin/getAdminList')
+          this.$store.dispatch('specs/getSpecsList')
         })
         .catch((err) => {
           this.$message.error(err.message)
@@ -124,6 +129,7 @@ export default {
       // 把表单数据还原到初始值
       this.form = { ...defaultForm }
       // 清空所有的表单验证
+      this.attrList = [{ value: '' }]
       // $nextTick 是在下次 DOM 更新循环结束之后执行延迟回调
       this.$nextTick(() => {
         this.$refs.form.clearValidate()
@@ -131,7 +137,11 @@ export default {
     },
     // 修改时设置表单数据
     setFormData (data) {
-      this.form = {...data} // 复制一份传入的管理员数据
+      // 处理规格属性
+      if (data.attrs !== '') {
+        this.attrList = data.attrs.map(item => ({ value: item }))
+      }
+      this.form = {...data} // 复制一份数据
     }
   }
 }
