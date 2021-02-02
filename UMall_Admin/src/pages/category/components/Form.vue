@@ -21,13 +21,13 @@
           <!-- value与v-model是全等比较 -->
           <el-option label="顶级分类" :value="0"></el-option>
           <!-- 循环一级分类 -->
-          <!-- <el-option
-            v-for="item of firstMenuList"
+          <el-option
+            v-for="item of firstCategoryList"
             :key="item.id"
-            :label="' |- ' + item.title"
+            :label="' |- ' + item.catename"
             :value="item.id"
           >
-          </el-option> -->
+          </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="分类名称" prop="title">
@@ -87,6 +87,10 @@
           <img width="100%" :src="dialogImageUrl" alt="" />
         </el-dialog>
       </el-form-item>
+      <!-- 修改的时候且有图片时显示分类图片-->
+      <el-form-item label="分类图片" v-if="form.id > 0 && editDefaultImg != ''">
+        <el-image style="width:148px; height: 148px" fit = "fill" :src = "editDefaultImg | recombinationImg" />
+      </el-form-item>
       <el-form-item label="状态">
         <!-- 开关组件
             active-value: Boolean | string | number 选中时的值
@@ -136,7 +140,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      firstMenuList: 'menu/firstMenuList'
+      firstCategoryList: 'category/firstCategoryList'
     })
   },
   methods: {
@@ -181,8 +185,7 @@ export default {
       console.log(file, this.fileList)
       // this.fileList = []
       // 从filelist中删除选择的图片
-      this.fileList = this.fileList.filter(item =>
-        item.url !== file.url)
+      this.fileList = this.fileList.filter(item => item.url !== file.url)
       // 显示选择图片的按钮
       this.hideUploadBtn = false
       // 如果是添加清空表单的图片数据, 如果是修改要还原修改之前的数据
@@ -194,7 +197,7 @@ export default {
           // 根据form数据中是否有id属性来判断当前是修改菜单还是添加菜单
           if (this.form.id && this.form.id > 0) {
             // 修改
-            // this.editCategory('updateCategory')
+            this.editCategory('updateCategory')
           } else {
             // 添加
             this.editCategory()
@@ -234,9 +237,9 @@ export default {
       // 清空所有的表单验证
       this.$refs.form.clearValidate()
       // 还原上传组件的数据
-      // this.hideUploadBtn = false
-      // this.editDefaultImg = ''
-      // this.fileList = []
+      this.hideUploadBtn = false
+      this.editDefaultImg = ''
+      this.fileList = []
     },
     // 修改时设置表单数据
     setFormData (data) {

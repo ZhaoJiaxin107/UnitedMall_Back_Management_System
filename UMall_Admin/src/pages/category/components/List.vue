@@ -26,7 +26,7 @@
     <el-table-column
       label="图片">
     <template #default = "props">
-      <img v-if="props.row.img !== ''" :src="props.row.img | recombinationImg" height = "80"/>
+      <img v-if="props.row.img !== ''" :src="props.row.img | recombinationImg" width = "80" height = "80"/>
     </template>
     </el-table-column>
     <el-table-column
@@ -48,7 +48,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { deleteMenu } from '@/api/menu'
+import { deleteCategory } from '@/api/category'
 export default {
   computed: {
     ...mapState({
@@ -78,7 +78,7 @@ export default {
         }
         // 调用接口删除菜单
         // console.log('删除')
-        deleteMenu(data.id).then(() => {
+        deleteCategory(data.id).then(() => {
           // 刷新列表数据
           this.$message.success({
             message: '删除成功',
@@ -86,7 +86,7 @@ export default {
               // 关闭对话框
               this.dialogFormVisible = false
               // 刷新列表数据
-              this.$store.dispatch('menu/getMenuList')
+              this.$store.dispatch('category/getCategoryList')
             }
           })
         }).catch(err => {

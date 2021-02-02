@@ -8,10 +8,10 @@ export default {
   getters: {
     firstCategoryList (state) {
       // 从list中筛选出一级菜单
-      return state.list.filter(item => item.type === 1 && item.pid === 0).map(item => (
+      return state.list.filter(item => item.pid === 0).map(item => (
         {
           id: item.id,
-          title: item.title
+          catename: item.catename
         }))
     }
   },
