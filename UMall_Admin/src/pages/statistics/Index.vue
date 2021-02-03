@@ -1,10 +1,14 @@
 <template>
   <el-row :gutter="20">
     <el-col :span="12">
-      <div class="chart1" ref="chart1"></div>
+      <el-card class = "box-card">
+        <div class="chart1" ref="chart1"></div>
+      </el-card>
     </el-col>
     <el-col :span="12">
-      <div class="chart2" ref="chart2"></div>
+      <el-card class = "box-card">
+        <div class="chart2" ref="chart2"></div>
+      </el-card>
     </el-col>
   </el-row>
 </template>
@@ -39,8 +43,7 @@ export default {
           {
             // data要展示的数据
             data: [230, 130, 264, 228, 135, 224, 320],
-            // type: 'line'
-            type: 'bar'
+            type: 'line'
           }
         ]
       }
@@ -49,7 +52,7 @@ export default {
     },
     echartInit2 () {
       const chartObj = echarts.init(this.$refs.chart2)
-      var base = +new Date(1968, 9, 3)
+      var base = +new Date(2015, 1, 1)
       var oneDay = 24 * 3600 * 1000
       var date = []
 
