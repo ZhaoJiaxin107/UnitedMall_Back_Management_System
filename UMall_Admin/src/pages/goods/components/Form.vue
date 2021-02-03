@@ -19,11 +19,25 @@
     <el-tabs v-model="activeName">
       <el-tab-pane label="基本信息" name="baseInfo">
         <el-form-item label="一级分类">
-          <el-select v-model = "form.first_cateid" placeholder="请选择一级分类">
+          <el-select v-model = "form.first_cateid" placeholder="请选择一级分类"
+          @change="onChangeCategory">
             <el-option label="请选择一级分类" :value="0"></el-option>
               <!-- 循环一级分类 -->
             <el-option
             v-for="item of firstCategoryList"
+            :key = "item.id"
+            :label ="' |- ' + item.catename"
+            :value = "item.id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="二级分类">
+          <el-select v-model = "form.second_cateid" placeholder="请选择二级分类">
+            <el-option label="请选择二级分类" :value="0"></el-option>
+              <!-- 循环一级分类 -->
+            <el-option
+            v-for="item of secondCategoryList"
             :key = "item.id"
             :label ="' |- ' + item.catename"
             :value = "item.id"
@@ -42,7 +56,7 @@
 
 <script>
 // 引入接口方法
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 // 导出所有的非default内容
 import * as model from '@/api/specs'
 const defaultForm = {
@@ -71,10 +85,14 @@ export default {
           { required: true, message: '请输入规格名称', trigger: 'blur' }
         ]
       },
-      attrList: [{ value: '' }] // 属性数组
+      secondCategoryList: [] // 二级分类数据
     }
   },
   computed: {
+    ...mapState({
+      // 获取分类列表
+      categoryList: state => state.category.list
+    }),
     ...mapGetters({
       // 获取一级分类
       firstCategoryList: 'category/firstCategoryList'
@@ -82,11 +100,23 @@ export default {
   },
   mounted () {
     // 如果没有一级分类信息, 则重新获取信息
-    if (this.firstCategoryList.length === 0) {
-      this.$store.dispatch('category/firstCategoryList')
+    if (this.categoryList.length === 0) {
+      this.$store.dispatch('category/getCategoryList')
     }
   },
   methods: {
+    // 切换一级分类时触发
+    onChangeCategory (id) {
+      // console.log(id, this.categoryList)
+      // 如果id为0则清空二级分类
+      // 如果id>0则获取当前分类的二级分类
+      if (id > 0) {
+        const category = this.categoryList.find(item => item.id === id)
+        this.secondCategoryList = category.children || []
+      } else {
+        this.secondCategoryList = []
+      }
+    },
     onSubmit () {
       this.$refs.form.validate((valid) => {
         if (valid) {
@@ -163,5 +193,4 @@ export default {
 .el-button {
   margin-left: 5px;
 }
-
 </style>
