@@ -45,6 +45,15 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="商品名称" prop="goodsname">
+           <el-input v-model.trim="form.goodsname" autocomplete="off" placeholder="请输入商品名称"></el-input>
+        </el-form-item>
+        <el-form-item label="价格" prop="price">
+           <el-input v-model.number="form.price" autocomplete="off" placeholder="请输入价格"></el-input>
+        </el-form-item>
+        <el-form-item label="市场价格" prop="market_price">
+           <el-input v-model.number="form.market_price" autocomplete="off" placeholder="请输入市场价格"></el-input>
+        </el-form-item>
       </el-tab-pane>
       <el-tab-pane label="图片信息" name="imageInfo">imageInfo</el-tab-pane>
       <el-tab-pane label="促销信息" name="promoteInfo">promoteInfo</el-tab-pane>
@@ -81,8 +90,14 @@ export default {
       activeName: 'baseInfo', // 点击的tab选项卡
       form: { ...defaultForm },
       rules: {
-        specsname: [
-          { required: true, message: '请输入规格名称', trigger: 'blur' }
+        goodsname: [
+          { required: true, message: '请输入商品名称', trigger: 'blur' }
+        ],
+        price: [
+          { required: true, message: '请输入价格', trigger: 'blur' }
+        ],
+        market_price: [
+          { required: true, message: '请输入市场价格', trigger: 'blur' }
         ]
       },
       secondCategoryList: [] // 二级分类数据
@@ -107,6 +122,8 @@ export default {
   methods: {
     // 切换一级分类时触发
     onChangeCategory (id) {
+      // 清空表单的second_cateid
+      this.form.second_cateid = 0
       // console.log(id, this.categoryList)
       // 如果id为0则清空二级分类
       // 如果id>0则获取当前分类的二级分类
