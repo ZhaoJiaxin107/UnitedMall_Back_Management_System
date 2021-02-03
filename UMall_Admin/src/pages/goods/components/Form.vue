@@ -39,7 +39,7 @@
             <el-option
             v-for="item of secondCategoryList"
             :key = "item.id"
-            :label ="' |- ' + item.catename"
+            :label ="item.catename"
             :value = "item.id"
             >
             </el-option>
@@ -53,6 +53,28 @@
         </el-form-item>
         <el-form-item label="市场价格" prop="market_price">
            <el-input v-model.number="form.market_price" autocomplete="off" placeholder="请输入市场价格"></el-input>
+        </el-form-item>
+         <el-form-item label="商品规格">
+          <el-select v-model = "form.specsid" placeholder="请选择商品规格" @change="onChangeSpecs">
+            <el-option label="请选择商品规格" :value="0"></el-option>
+              <!-- 循环一级分类 -->
+            <el-option
+            v-for="item of specsList"
+            :key = "item.id"
+            :label ="item.specsname"
+            :value = "item.id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="规格属性">
+          <el-select v-model = "form.specsattr" placeholder="请选择规格属性">
+            <el-option label="请选择规格属性" value=""></el-option>
+              <!-- 循环一级分类 -->
+            <el-option v-for="item of attrList" :key = "item" :label ="item"
+            :value = "item">
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-tab-pane>
       <el-tab-pane label="图片信息" name="imageInfo">imageInfo</el-tab-pane>
@@ -100,13 +122,16 @@ export default {
           { required: true, message: '请输入市场价格', trigger: 'blur' }
         ]
       },
-      secondCategoryList: [] // 二级分类数据
+      secondCategoryList: [], // 二级分类数据
+      attrList: [] // 属性列表
     }
   },
   computed: {
     ...mapState({
       // 获取分类列表
-      categoryList: state => state.category.list
+      categoryList: state => state.category.list,
+      // 获取商品规格
+      specsList: state => state.specs.allList
     }),
     ...mapGetters({
       // 获取一级分类
@@ -118,6 +143,7 @@ export default {
     if (this.categoryList.length === 0) {
       this.$store.dispatch('category/getCategoryList')
     }
+    this.$store.dispatch('specs/getAllSpecs')
   },
   methods: {
     // 切换一级分类时触发
@@ -132,6 +158,20 @@ export default {
         this.secondCategoryList = category.children || []
       } else {
         this.secondCategoryList = []
+      }
+    },
+    // 切换规格属性时触发
+    onChangeSpecs (id) {
+      // 清空表单的s规格属性数据
+      this.form.specsattr = ''
+      // console.log(id, this.categoryList)
+      // 如果id为0则规格属性数据
+      // 如果id>0则获取当前商品规格规格属性数据
+      if (id > 0) {
+        const specs = this.specsList.find(item => item.id === id)
+        this.attrList = specs.attrs || []
+      } else {
+        this.attrList = []
       }
     },
     onSubmit () {
@@ -181,8 +221,6 @@ export default {
     clearForm () {
       // 把表单数据还原到初始值
       this.form = { ...defaultForm }
-      // 清空所有的表单验证
-      this.attrList = [{ value: '' }]
       // $nextTick 是在下次 DOM 更新循环结束之后执行延迟回调
       this.$nextTick(() => {
         this.$refs.form.clearValidate()
