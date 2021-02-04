@@ -7,7 +7,8 @@ import App from './App'
 import router from './router'
 import store from './store'
 import './filters/img.js' // 全局过滤器
-import './utils/function.js' // 公共方法
+import './utils/mixin.js' // 公共方法
+import './utils/function.js'
 // 引入reset.css
 import './assets/css/reset.css'
 

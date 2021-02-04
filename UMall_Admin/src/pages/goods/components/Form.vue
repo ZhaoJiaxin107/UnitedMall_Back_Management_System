@@ -12,7 +12,6 @@
     <el-form
       :model="form"
       ref="form"
-      :rules="rules"
       label-suffix="："
       label-width="120px"
     >
@@ -49,10 +48,10 @@
            <el-input v-model.trim="form.goodsname" autocomplete="off" placeholder="请输入商品名称"></el-input>
         </el-form-item>
         <el-form-item label="价格" prop="price">
-           <el-input v-model.number="form.price" autocomplete="off" placeholder="请输入价格"></el-input>
+           <el-input v-model.trim="form.price" autocomplete="off" placeholder="请输入价格"></el-input>
         </el-form-item>
         <el-form-item label="市场价格" prop="market_price">
-           <el-input v-model.number="form.market_price" autocomplete="off" placeholder="请输入市场价格"></el-input>
+           <el-input v-model.trim="form.market_price" autocomplete="off" placeholder="请输入市场价格"></el-input>
         </el-form-item>
          <el-form-item label="商品规格">
           <el-select v-model = "form.specsid" placeholder="请选择商品规格" @change="onChangeSpecs">
@@ -168,6 +167,10 @@
 import vueWangeditor from 'vue-wangeditor'
 // 引入接口方法
 import { mapGetters, mapState } from 'vuex'
+// 导入规则
+import goodsRules from '@/validate/goods'
+// 导入公共方法
+import { validate } from '@/utils/function'
 // 导出所有的非default内容
 import * as model from '@/api/specs'
 const defaultForm = {
@@ -194,17 +197,6 @@ export default {
       title: '', // 对话框的标题
       activeName: 'baseInfo', // 点击的tab选项卡
       form: { ...defaultForm },
-      rules: {
-        goodsname: [
-          { required: true, message: '请输入商品名称', trigger: 'blur' }
-        ],
-        price: [
-          { required: true, message: '请输入价格', trigger: 'blur' }
-        ],
-        market_price: [
-          { required: true, message: '请输入市场价格', trigger: 'blur' }
-        ]
-      },
       secondCategoryList: [], // 二级分类数据
       attrList: [], // 属性列表
       imgLimit: 1,
@@ -312,8 +304,14 @@ export default {
     },
     onSubmit () {
       // 获取富文本编辑器中的数据
-      console.log(this.$refs.editor.getHtml())
-      this.$refs.form.validate((valid) => {
+      // console.log(this.$refs.editor.getHtml())
+      const valid = validate(this.form, goodsRules)
+      if (valid !== true) {
+        this.$message.error(valid)
+        return
+      }
+      // 验证通过之后才处理数据
+      /* this.$refs.form.validate((valid) => {
         if (valid) {
           // 根据form数据中是否有id属性来判断当前是修改菜单还是添加菜单
           if (this.form.id && this.form.id > 0) {
@@ -324,7 +322,7 @@ export default {
             this.editGoods()
           }
         }
-      })
+      }) */
     },
     editGoods (method = 'addGoods') {
       // 从规格数属性中过滤出不为空的数据, 然后要转换为字符串
