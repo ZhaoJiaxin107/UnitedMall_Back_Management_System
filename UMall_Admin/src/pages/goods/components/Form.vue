@@ -305,6 +305,8 @@ export default {
     onSubmit () {
       // 获取富文本编辑器中的数据
       // console.log(this.$refs.editor.getHtml())
+      // 把富文本中的纯文本添加到this.form中
+      this.form.description = this.$refs.editor.getText()
       const valid = validate(this.form, goodsRules)
       if (valid !== true) {
         this.$message.error(valid)
