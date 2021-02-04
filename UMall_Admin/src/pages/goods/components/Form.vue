@@ -147,13 +147,18 @@
         id: 创建编辑器的唯一标识(必填) -->
         <vue-wangeditor
         id="editor"
-        v-model="form.description"
+        ref = "editor"
+        :disabledMenus = "['location','insertcode','video']"
         width = "100%"
-        height = "300"
+        height = "340"
         >
         </vue-wangeditor>
       </el-tab-pane>
     </el-tabs>
+     <el-form-item>
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="onSubmit">确 定</el-button>
+     </el-form-item>
     </el-form>
   </el-dialog>
 </template>
@@ -306,20 +311,22 @@ export default {
       this.form.img = this.editDefaultImg
     },
     onSubmit () {
+      // 获取富文本编辑器中的数据
+      console.log(this.$refs.editor.getHtml())
       this.$refs.form.validate((valid) => {
         if (valid) {
           // 根据form数据中是否有id属性来判断当前是修改菜单还是添加菜单
           if (this.form.id && this.form.id > 0) {
             // 修改
-            this.editSpecs('updateSpecs')
+            this.editGoods('updateGoods')
           } else {
             // 添加
-            this.editSpecs()
+            this.editGoods()
           }
         }
       })
     },
-    editSpecs (method = 'addSpecs') {
+    editGoods (method = 'addGoods') {
       // 从规格数属性中过滤出不为空的数据, 然后要转换为字符串
       this.form.attrs = this.attrList.filter(item => item.value !== '').map(item => item.value).join(',')
       if (this.form.attrs === '') {
@@ -332,14 +339,14 @@ export default {
           // 添加成功
           // 显示添加成功的信息
           this.$message.success({
-            message: method === 'addSpecs' ? '添加成功' : '修改成功',
+            message: method === 'addGoods' ? '添加成功' : '修改成功',
             // 关闭对话框
             onClose: () => {
               this.dialogFormVisible = false
             }
           })
           // 添加时重新获取总数量
-          if (method === 'addSpecs') {
+          if (method === 'addGoods') {
             this.$store.dispatch('specs/getSpecsTotal')
           }
           // 刷新列表数据
@@ -374,6 +381,6 @@ export default {
   display:none !important
 }
 /deep/ .wangEditor-txt{
-  height: 250px !important
+  height: 280px !important
 }
 </style>
