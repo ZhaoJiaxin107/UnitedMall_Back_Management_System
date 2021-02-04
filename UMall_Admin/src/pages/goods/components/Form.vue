@@ -77,8 +77,71 @@
           </el-select>
         </el-form-item>
       </el-tab-pane>
-      <el-tab-pane label="图片信息" name="imageInfo">imageInfo</el-tab-pane>
-      <el-tab-pane label="促销信息" name="promoteInfo">promoteInfo</el-tab-pane>
+      <el-tab-pane label="图片信息" name="imageInfo">
+        <el-form-item label="图片">
+        <!-- 上传图片
+            list-type:文件列表的类型 text/picture/picture-card
+            auto-upload: 是否自动上传
+            limit 允许上传的文件数量
+            on-change 文件状态改变时的钩子, 添加文件、上传成功和上传失败时都会被调用
+        -->
+        <el-upload
+          :class = "{upload: hideUploadBtn}"
+          action="#"
+          list-type="picture-card"
+          :limit="imgLimit"
+          :file-list="fileList"
+          accept="image/png, image/gif, image/jpeg"
+          :on-change="uploadImg"
+          :auto-upload="false">
+          <i slot="default" class="el-icon-plus"></i>
+          <div slot="file" slot-scope="{ file }">
+            <!-- 预览的小图 -->
+            <img
+              class="el-upload-list__item-thumbnail"
+              :src="file.url"
+              alt=""
+            />
+            <!-- 预览大图片的按钮 -->
+            <span class="el-upload-list__item-actions">
+              <span
+                class="el-upload-list__item-preview"
+                @click="handlePictureCardPreview(file)"
+              >
+                <i class="el-icon-zoom-in"></i>
+              </span>
+              <!-- 删除图片的按钮 -->
+              <span
+                class="el-upload-list__item-delete"
+                @click="handleRemove(file)"
+              >
+                <i class="el-icon-delete"></i>
+              </span>
+            </span>
+          </div>
+        </el-upload>
+        <!-- 展示大图片的对话框
+             append-to-body: 是否挂载在body上
+        -->
+        <el-dialog :visible.sync="dialogVisible" :append-to-body = "true">
+          <img width="100%" :src="dialogImageUrl" alt="" />
+        </el-dialog>
+      </el-form-item>
+      </el-tab-pane>
+      <el-tab-pane label="促销信息" name="promoteInfo">
+        <el-form-item label="新品">
+          <el-switch v-model="form.isnew" :active-value="1" :inactive-value="2">
+          </el-switch>
+        </el-form-item>
+        <el-form-item label="热卖">
+          <el-switch v-model="form.ishot" :active-value="1" :inactive-value="2">
+          </el-switch>
+        </el-form-item>
+        <el-form-item label="状态">
+          <el-switch v-model="form.status" :active-value="1" :inactive-value="2">
+          </el-switch>
+        </el-form-item>
+      </el-tab-pane>
       <el-tab-pane label="详细信息" name="detailInfo">detailInfo</el-tab-pane>
     </el-tabs>
     </el-form>
@@ -123,7 +186,13 @@ export default {
         ]
       },
       secondCategoryList: [], // 二级分类数据
-      attrList: [] // 属性列表
+      attrList: [], // 属性列表
+      imgLimit: 1,
+      fileList: [], // 选择的文件列表
+      dialogVisible: false, // 是否展示大图片
+      dialogImageUrl: '', //  大图片的地址
+      hideUploadBtn: false, // 是否隐藏选择图片的按钮
+      editDefaultImg: '' // 存储修改时传入的图片
     }
   },
   computed: {
@@ -173,6 +242,53 @@ export default {
       } else {
         this.attrList = []
       }
+    },
+    // 上传图片
+    uploadImg (file, fileList) {
+      // console.log(file, fileList)
+      // 对大小和类型进行限制
+      const allowType = ['image/png', 'image/gif', 'image/jpeg']
+      if (!allowType.includes(file.raw.type)) {
+        // 选择了不允许的类型
+        this.$message.error('不是正确的图片格式')
+        // 移除当前选择的文件, 即过滤出不是当前的图片地址的文件
+        this.fileList = this.fileList.filter(item => item.url !== file.url)
+        return
+      }
+      const allowMaxSize = 1024 * 1024
+      if (file.size > allowMaxSize) {
+        // 文件超过允许的大小
+        this.$message.error('文件超过允许的大小')
+        // 移除当前选择的文件, 即过滤出不是当前的图片地址的文件
+        this.fileList = this.fileList.filter(item => item.url !== file.url)
+        return
+      }
+      // 当选择的文件的列表等于允许的最大数量时
+      // 隐藏选择图片的按钮
+      if (fileList.length === this.imgLimit) {
+        this.hideUploadBtn = true
+      }
+      this.fileList = fileList
+      // 把文件的资源保存到表单数据中
+      this.form.img = file.raw
+    },
+    // 图片预览(展示大图)
+    handlePictureCardPreview (file) {
+      // console.log(file)
+      // 把file的链接赋值给大图片的src
+      this.dialogImageUrl = file.url
+      // 显示大图的对话框
+      this.dialogVisible = true
+    },
+    handleRemove (file) {
+      // console.log(file, this.fileList)
+      // this.fileList = []
+      // 从filelist中删除选择的图片
+      this.fileList = this.fileList.filter(item => item.url !== file.url)
+      // 显示选择图片的按钮
+      this.hideUploadBtn = false
+      // 如果是添加清空表单的图片数据, 如果是修改要还原修改之前的数据
+      this.form.img = this.editDefaultImg
     },
     onSubmit () {
       this.$refs.form.validate((valid) => {
@@ -239,13 +355,7 @@ export default {
 </script>
 
 <style scoped>
-.item-container{
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: space-around;
-}
-.el-button {
-  margin-left: 5px;
+.upload /deep/ .el-upload {
+  display:none !important
 }
 </style>
