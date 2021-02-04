@@ -142,13 +142,25 @@
           </el-switch>
         </el-form-item>
       </el-tab-pane>
-      <el-tab-pane label="详细信息" name="detailInfo">detailInfo</el-tab-pane>
+      <el-tab-pane label="详细信息" name="detailInfo">
+        <!-- 富文本
+        id: 创建编辑器的唯一标识(必填) -->
+        <vue-wangeditor
+        id="editor"
+        v-model="form.description"
+        width = "100%"
+        height = "300"
+        >
+        </vue-wangeditor>
+      </el-tab-pane>
     </el-tabs>
     </el-form>
   </el-dialog>
 </template>
 
 <script>
+// 引入富文本编辑器插件
+import vueWangeditor from 'vue-wangeditor'
 // 引入接口方法
 import { mapGetters, mapState } from 'vuex'
 // 导出所有的非default内容
@@ -168,6 +180,9 @@ const defaultForm = {
   status: 1 // 状态 1启用 2禁用
 }
 export default {
+  components: {
+    vueWangeditor
+  },
   data () {
     return {
       dialogFormVisible: true,
@@ -357,5 +372,8 @@ export default {
 <style scoped>
 .upload /deep/ .el-upload {
   display:none !important
+}
+/deep/ .wangEditor-txt{
+  height: 250px !important
 }
 </style>
