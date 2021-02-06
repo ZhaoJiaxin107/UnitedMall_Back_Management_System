@@ -193,7 +193,7 @@ export default {
   },
   data () {
     return {
-      dialogFormVisible: true,
+      dialogFormVisible: false,
       title: '', // 对话框的标题
       activeName: 'baseInfo', // 点击的tab选项卡
       form: { ...defaultForm },
@@ -313,18 +313,14 @@ export default {
         return
       }
       // 验证通过之后才处理数据
-      /* this.$refs.form.validate((valid) => {
-        if (valid) {
-          // 根据form数据中是否有id属性来判断当前是修改菜单还是添加菜单
-          if (this.form.id && this.form.id > 0) {
-            // 修改
-            this.editGoods('updateGoods')
-          } else {
-            // 添加
-            this.editGoods()
-          }
-        }
-      }) */
+      // 根据form数据中是否有id属性来判断当前是修改菜单还是添加菜单
+      if (this.form.id && this.form.id > 0) {
+        // 修改
+        this.editGoods('updateGoods')
+      } else {
+        // 添加
+        this.editGoods()
+      }
     },
     editGoods (method = 'addGoods') {
       // 从规格数属性中过滤出不为空的数据, 然后要转换为字符串
