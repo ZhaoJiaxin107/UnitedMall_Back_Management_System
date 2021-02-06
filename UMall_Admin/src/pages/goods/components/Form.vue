@@ -367,7 +367,7 @@ export default {
       // 把表单数据还原到初始值
       this.form = { ...defaultForm }
       // 清空富文本编辑器数据
-      this.$refs.editor.clear()
+      // this.$refs.editor.clear()
       // 还原选项卡
       this.activeName = 'baseInfo'
       // 还原上传组件的数据
