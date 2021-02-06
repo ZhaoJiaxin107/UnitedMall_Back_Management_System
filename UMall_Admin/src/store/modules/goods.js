@@ -1,5 +1,5 @@
 // 导入接口文件
-import { getPageGoods, getGoodsTotal } from '@/api/specs'
+import { getPageGoods, getGoodsTotal } from '@/api/goods'
 
 export default {
   namespaced: true,

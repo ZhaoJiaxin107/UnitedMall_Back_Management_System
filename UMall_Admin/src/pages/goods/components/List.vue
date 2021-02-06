@@ -10,14 +10,35 @@
         label:表头
          -->
     <el-table-column
-      prop="specsname"
-      label="规格名称">
+      prop="goodsname"
+      label="商品名称">
     </el-table-column>
      <el-table-column
-      prop="attrs"
-      label="规格属性">
+      prop="price"
+      label="商品价格">
+    </el-table-column>
+    <el-table-column
+      prop="market_price"
+      label="市场价格">
+    </el-table-column>
+    <el-table-column
+      label="图片">
     <template #default = "props">
-      <el-tag v-for = "item of props.row.attrs" type="info" :key = "item" style="margin-right: 5px">{{item}}</el-tag>
+      <img v-if = "props.row.img !== ''" :src="props.row.img | recombinationImg" width="80" height="80">
+    </template>
+    </el-table-column>
+    <el-table-column
+      label="是否新品">
+    <template #default = "props">
+      <el-tag v-if = "props.row.isnew === 1">是</el-tag>
+      <el-tag v-else type="danger">否</el-tag>
+    </template>
+    </el-table-column>
+     <el-table-column
+      label="是否热卖">
+    <template #default = "props">
+      <el-tag v-if = "props.row.ishot === 1">是</el-tag>
+      <el-tag v-else type="danger">否</el-tag>
     </template>
     </el-table-column>
     <el-table-column
@@ -30,8 +51,8 @@
     <el-table-column
       label="操作">
     <template #default = "props">
-       <el-button type="primary" size = "mini" @click="onEdit(props.row)"><i class="el-icon-edit"></i> 编辑</el-button>
-       <el-button type="danger" size = "mini" @click="onDelete(props.row)" v-if = "props.row.id > 1"><i class="el-icon-delete"></i> 删除</el-button>
+       <el-button type="primary" size = "mini" @click="onEdit(props.row)"><i class="el-icon-edit"></i> 编辑</el-button><br>
+       <el-button type="danger" size = "mini" @click="onDelete(props.row)" style="margin-top:10px"><i class="el-icon-delete"></i> 删除</el-button>
     </template>
     </el-table-column>
   </el-table>
@@ -57,27 +78,27 @@
 
 <script>
 import { mapState } from 'vuex'
-import { deleteSpecs } from '@/api/specs'
+import { deleteGoods } from '@/api/goods'
 export default {
   computed: {
     ...mapState({
-      list: state => state.specs.list,
-      size: state => state.specs.size,
-      page: state => state.specs.page,
-      total: state => state.specs.total
+      list: state => state.goods.list,
+      size: state => state.goods.size,
+      page: state => state.goods.page,
+      total: state => state.goods.total
     })
   },
   mounted () {
-    this.$store.dispatch('specs/getSpecsList')
-    this.$store.dispatch('specs/getSpecsTotal')
+    this.$store.dispatch('goods/getGoodsList')
+    this.$store.dispatch('goods/getGoodsTotal')
   },
   methods: {
     onCurrentChange (page) {
       // console.log(page)
       // 更改vuex中的当前页
-      this.$store.commit('specs/SET_PAGE', page)
-      // 重新获取当前页的管理员数据
-      this.$store.dispatch('specs/getSpecsList')
+      this.$store.commit('goods/SET_PAGE', page)
+      // 重新获取当前页的商品数据
+      this.$store.dispatch('goods/getGoodsList')
     },
     onEdit (data) {
       // 触发编辑按钮
@@ -91,7 +112,7 @@ export default {
         // 完成删除功能
         // 调用接口删除角色
         // console.log('删除')
-        deleteSpecs(data.id).then(() => {
+        deleteGoods(data.id).then(() => {
           // 刷新列表数据
           this.$message.success({
             message: '删除成功',
@@ -108,10 +129,10 @@ export default {
                 } else {
                   page = this.page - 1
                 }
-                this.$store.commit('specs/SET_PAGE', page)
+                this.$store.commit('goods/SET_PAGE', page)
               }
               // 刷新列表数据
-              this.$store.dispatch('specs/getSpecsList')
+              this.$store.dispatch('goods/getGoodsList')
             }
           })
         }).catch(err => {

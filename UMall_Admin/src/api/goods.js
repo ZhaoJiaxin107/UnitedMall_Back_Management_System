@@ -13,7 +13,7 @@ export const addGoods = (data) => {
 // 修改规格
 export const updateGoods = (data) => {
 // 判断data中是否包含id属性且大于0
-  if (!Reflect.has(data, 'id') || data.id <= 0) {
+  if (!data.get('id')) {
     return Promise.reject(new Error('缺少ID参数或id参数错误'))
   }
   // 有数据上传, 需要设置headers
@@ -34,12 +34,12 @@ export const getPageGoods = (page = 1, size = 5) => {
   })
 }
 
-// 获取规格总数量
+// 获取商品总数量
 export const getGoodsTotal = () => {
   return http.get('/goodscount')
 }
 
-// 删除规格属性
+// 删除商品
 export const deleteGoods = (id) => {
   return http.post('/goodsdelete', { id })
 }

@@ -126,6 +126,10 @@
           <img width="100%" :src="dialogImageUrl" alt="" />
         </el-dialog>
       </el-form-item>
+       <!-- 修改的时候且有图片时显示分类图片-->
+      <el-form-item label="商品图片" v-if="form.id > 0 && editDefaultImg != ''">
+        <el-image style="width:148px; height: 148px" fit = "fill" :src = "editDefaultImg | recombinationImg" />
+      </el-form-item>
       </el-tab-pane>
       <el-tab-pane label="促销信息" name="promoteInfo">
         <el-form-item label="新品">
@@ -150,6 +154,7 @@
         :disabledMenus = "['location','insertcode','video']"
         width = "100%"
         height = "340"
+        :value = "form.description"
         >
         </vue-wangeditor>
       </el-tab-pane>
@@ -323,6 +328,11 @@ export default {
       }
     },
     editGoods (method = 'addGoods') {
+      // 如果是修改，删除数据中多余的属性 secondcatename，firstcatename
+      if (this.form.id > 0) {
+        Reflect.deleteProperty(this.form, 'secondcatename') // delete this.form.secondcatename
+        Reflect.deleteProperty(this.form, 'firstcatename')
+      }
       // 把富文本中的内容(包含html)添加到this.form中
       this.form.description = this.$refs.editor.getHtml()
       // 有文件的上传, 必须使用FormData()
@@ -343,11 +353,11 @@ export default {
             }
           })
           // 添加时重新获取总数量
-          // if (method === 'addGoods') {
-          //   this.$store.dispatch('goods/getGoodsTotal')
-          // }
+          if (method === 'addGoods') {
+            this.$store.dispatch('goods/getGoodsTotal')
+          }
           // 刷新列表数据
-          // this.$store.dispatch('goods/getGoodsList')
+          this.$store.dispatch('goods/getGoodsList')
         })
         .catch((err) => {
           this.$message.error(err.message)
@@ -356,6 +366,10 @@ export default {
     clearForm () {
       // 把表单数据还原到初始值
       this.form = { ...defaultForm }
+      // 清空富文本编辑器数据
+      this.$refs.editor.clear()
+      // 还原选项卡
+      this.activeName = 'baseInfo'
       // 还原上传组件的数据
       this.hideUploadBtn = false
       this.editDefaultImg = ''
@@ -363,6 +377,9 @@ export default {
     },
     // 修改时设置表单数据
     setFormData (data) {
+      // 根据商品的一级分类设置二级分类的数据
+      const category = this.categoryList.find(item => item.id === data.first_cateid)
+      this.secondCategoryList = category.children || []
       // 保存商品的图片
       this.editDefaultImg = data.img
       this.form = {...data} // 复制一份数据
