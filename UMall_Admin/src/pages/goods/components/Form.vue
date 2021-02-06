@@ -172,7 +172,7 @@ import goodsRules from '@/validate/goods'
 // 导入公共方法
 import { validate } from '@/utils/function'
 // 导出所有的非default内容
-import * as model from '@/api/specs'
+import * as model from '@/api/goods'
 const defaultForm = {
   first_cateid: 0, // 一级分类ID(required)
   second_cateid: 0, // 二级分类ID(required)
@@ -243,7 +243,7 @@ export default {
     },
     // 切换规格属性时触发
     onChangeSpecs (id) {
-      // 清空表单的s规格属性数据
+      // 清空表单的规格属性数据
       this.form.specsattr = ''
       // console.log(id, this.categoryList)
       // 如果id为0则规格属性数据
@@ -323,14 +323,15 @@ export default {
       }
     },
     editGoods (method = 'addGoods') {
-      // 从规格数属性中过滤出不为空的数据, 然后要转换为字符串
-      this.form.attrs = this.attrList.filter(item => item.value !== '').map(item => item.value).join(',')
-      if (this.form.attrs === '') {
-        this.$message.error('请输入规格属性')
-        return
+      // 把富文本中的内容(包含html)添加到this.form中
+      this.form.description = this.$refs.editor.getHtml()
+      // 有文件的上传, 必须使用FormData()
+      const data = new FormData()
+      for (const k in this.form) {
+        data.append(k, this.form[k])
       }
       // 处理菜单的添加,把表单的数据提交给接口
-      model[method](this.form)
+      model[method](data)
         .then(() => {
           // 添加成功
           // 显示添加成功的信息
@@ -342,11 +343,11 @@ export default {
             }
           })
           // 添加时重新获取总数量
-          if (method === 'addGoods') {
-            this.$store.dispatch('specs/getSpecsTotal')
-          }
+          // if (method === 'addGoods') {
+          //   this.$store.dispatch('goods/getGoodsTotal')
+          // }
           // 刷新列表数据
-          this.$store.dispatch('specs/getSpecsList')
+          // this.$store.dispatch('goods/getGoodsList')
         })
         .catch((err) => {
           this.$message.error(err.message)
@@ -355,17 +356,15 @@ export default {
     clearForm () {
       // 把表单数据还原到初始值
       this.form = { ...defaultForm }
-      // $nextTick 是在下次 DOM 更新循环结束之后执行延迟回调
-      this.$nextTick(() => {
-        this.$refs.form.clearValidate()
-      })
+      // 还原上传组件的数据
+      this.hideUploadBtn = false
+      this.editDefaultImg = ''
+      this.fileList = []
     },
     // 修改时设置表单数据
     setFormData (data) {
-      // 处理规格属性
-      if (data.attrs !== '') {
-        this.attrList = data.attrs.map(item => ({ value: item }))
-      }
+      // 保存商品的图片
+      this.editDefaultImg = data.img
       this.form = {...data} // 复制一份数据
     }
   }

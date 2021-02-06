@@ -25,8 +25,8 @@ export const updateGoods = (data) => {
 }
 
 // 分页获取商品数据
-export const getPageSpecs = (page = 1, size = 1) => {
-  return http.get('/specslist', {
+export const getPageGoods = (page = 1, size = 5) => {
+  return http.get('/goodslist', {
     params: {
       page,
       size
