@@ -74,7 +74,7 @@
       </el-form-item>
       <!-- 修改的时候且有图片时显示分类图片-->
       <el-form-item label="轮播图图片" v-if="form.id > 0 && editDefaultImg != ''">
-        <el-image style="width:148px; height: 148px" fit = "fill" :src = "editDefaultImg | recombinationImg" />
+        <el-image style="width:180px; height: 60px" fit = "fill" :src = "editDefaultImg | recombinationImg" />
       </el-form-item>
       <el-form-item label="状态">
         <!-- 开关组件
@@ -96,7 +96,7 @@
 // 引入接口方法
 // 导出所有的非default内容
 // import { addMenu, updateMenu } from '@/api/menu'
-import * as model from '@/api/category'
+import * as model from '@/api/banner'
 const defaultForm = {
   title: '', // 轮播图名称
   img: '', // 分类的图片
@@ -179,16 +179,21 @@ export default {
           // 根据form数据中是否有id属性来判断当前是修改菜单还是添加菜单
           if (this.form.id && this.form.id > 0) {
             // 修改
-            this.editCategory('updateCategory')
+            this.editBanner('updateBanner')
           } else {
+            // 如果没有上传图片
+            if (this.fileList.length === 0) {
+              this.$message.error('请添加轮播图')
+              return
+            }
             // 添加
-            this.editCategory()
+            this.editBanner()
             // console.log(this.form)
           }
         }
       })
     },
-    editCategory (method = 'addCategory') {
+    editBanner (method = 'addBanner') {
       // 因为有文件所以需要用FormData来存储和传递数据
       const data = new FormData() // js的原生对象
       for (let k in this.form) {
@@ -200,14 +205,14 @@ export default {
           // 添加成功
           // 显示添加成功的信息
           this.$message.success({
-            message: method === 'addCategory' ? '添加成功' : '修改成功',
+            message: method === 'addBanner' ? '添加成功' : '修改成功',
             // 关闭对话框
             onClose: () => {
               this.dialogFormVisible = false
             }
           })
           // 刷新列表数据
-          this.$store.dispatch('category/getCategoryList')
+          this.$store.dispatch('banner/getBannerList')
         })
         .catch((err) => {
           this.$message.error(err.message)

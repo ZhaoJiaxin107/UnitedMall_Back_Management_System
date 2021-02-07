@@ -1,32 +1,21 @@
 <template>
-<!--
-    树形数据表格
-    data: 要显示的数据
-    row-key: 循环的tr的key值 对应的菜单数据的编号
-    border: 是否添加边框
-    default-expand-all: 是否展开所有的数据
-    tree-props: 下级数据的结构 {children(表格组件属性): 'children(表单数据对应的下级菜单)'}
--->
+<!-- 普通数据表格 -->
  <el-table
-    :data="list"
+    :data = "list"
     style="width: 100%;margin: 20px 0;"
     row-key="id"
-    border
-    height="400"
-    default-expand-all
-    :tree-props="{children: 'children'}">
+    border>
     <!-- el-table-column:表格的列组件
         prop: 菜单数据中对应的数据
         label:表头
          -->
     <el-table-column
-      prop="catename"
-      label="分类名称">
+      prop="title"
+      label="轮播图标题">
     </el-table-column>
-    <el-table-column
-      label="图片">
+    <el-table-column label="图片">
     <template #default = "props">
-      <img v-if="props.row.img !== ''" :src="props.row.img | recombinationImg" width = "80" height = "80"/>
+      <img v-if="props.row.img !== ''" :src="props.row.img | recombinationImg" width = "180" height = "60"/>
     </template>
     </el-table-column>
     <el-table-column
@@ -48,37 +37,32 @@
 
 <script>
 import { mapState } from 'vuex'
-import { deleteCategory } from '@/api/category'
+import { deleteBanner } from '@/api/banner'
 export default {
   computed: {
     ...mapState({
-      list: state => state.category.list
+      list: state => state.banner.list
     })
   },
   mounted () {
     if (this.list.length === 0) {
-      this.$store.dispatch('category/getCategoryList')
+      this.$store.dispatch('banner/getBannerList')
     }
   },
   methods: {
     onEdit (data) {
-    //   console.log('on edit...')
-    // 触发编辑按钮
-    // 通知父组件显示编辑菜单的对话框, 把当前编辑的数据传递过去
+      // console.log('on edit...', data)
+      // 触发编辑按钮
+      // 通知父组件显示编辑菜单的对话框, 把当前编辑的数据传递过去
       this.$emit('edit', data)
     },
     onDelete (data) {
       // element-ui的弹出框this.$comfirm(显示的信息[,标题,其他的配置项目])
       this.$confirm('确定要删除吗?', '提示', { type: 'error' }).then(() => {
         // 完成删除功能
-        // 如果有下级菜单，就不允许删除
-        if (Reflect.has(data, 'children') && data.children.length > 0) {
-          this.$message.error('有下级菜单, 不允许删除')
-          return
-        }
-        // 调用接口删除菜单
+        // 调用接口删除角色
         // console.log('删除')
-        deleteCategory(data.id).then(() => {
+        deleteBanner(data.id).then(() => {
           // 刷新列表数据
           this.$message.success({
             message: '删除成功',
@@ -86,7 +70,7 @@ export default {
               // 关闭对话框
               this.dialogFormVisible = false
               // 刷新列表数据
-              this.$store.dispatch('category/getCategoryList')
+              this.$store.dispatch('banner/getBannerList')
             }
           })
         }).catch(err => {
