@@ -154,7 +154,7 @@
         :disabledMenus = "['location','insertcode','video']"
         width = "100%"
         height = "340"
-        :value = "form.description"
+        :value="form.description"
         >
         </vue-wangeditor>
       </el-tab-pane>
@@ -334,7 +334,7 @@ export default {
         Reflect.deleteProperty(this.form, 'firstcatename')
       }
       // 把富文本中的内容(包含html)添加到this.form中
-      this.form.description = this.$refs.editor.getHtml()
+      this.form.description = this.$refs.editor.getText()
       // 有文件的上传, 必须使用FormData()
       const data = new FormData()
       for (const k in this.form) {
@@ -367,7 +367,7 @@ export default {
       // 把表单数据还原到初始值
       this.form = { ...defaultForm }
       // 清空富文本编辑器数据
-      // this.$refs.editor.clear()
+      this.$refs.editor.clear()
       // 还原选项卡
       this.activeName = 'baseInfo'
       // 还原上传组件的数据
@@ -377,12 +377,15 @@ export default {
     },
     // 修改时设置表单数据
     setFormData (data) {
+      // console.log(data)
       // 根据商品的一级分类设置二级分类的数据
       const category = this.categoryList.find(item => item.id === data.first_cateid)
       this.secondCategoryList = category.children || []
       // 保存商品的图片
       this.editDefaultImg = data.img
       this.form = {...data} // 复制一份数据
+      // 设置编辑器内容
+      this.$refs.editor.setHtml(data.description)
     }
   }
 }
@@ -392,7 +395,7 @@ export default {
 .upload /deep/ .el-upload {
   display:none !important
 }
-/deep/ .wangEditor-txt{
+.wangEditor-txt{
   height: 280px !important
 }
 </style>
