@@ -30,7 +30,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="分类名称" prop="title">
+      <el-form-item label="分类名称" prop="catename">
         <el-input
           v-model.trim="form.catename"
           autocomplete="off"
