@@ -8,6 +8,7 @@ import admin from './modules/admin'
 import category from './modules/category'
 import specs from './modules/specs'
 import goods from './modules/goods'
+import banner from './modules/banner'
 // 使用vuex插件
 Vue.use(Vuex)
 
@@ -19,7 +20,8 @@ const store = new Vuex.Store({
     admin,
     category,
     specs,
-    goods
+    goods,
+    banner
   }
 })
 
