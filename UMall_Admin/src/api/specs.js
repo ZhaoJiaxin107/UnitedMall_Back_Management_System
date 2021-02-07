@@ -15,7 +15,7 @@ export const updateSpecs = (data) => {
 }
 
 // 分页获取规格数据
-export const getPageSpecs = (page = 1, size = 1) => {
+export const getPageSpecs = (page = 1, size = 2) => {
   return http.get('/specslist', {
     params: {
       page,
