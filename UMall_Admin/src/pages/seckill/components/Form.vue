@@ -24,11 +24,26 @@
             @change = "timeRange">
         </el-date-picker>
       </el-form-item>
+      <el-form-item label="一级分类">
+          <el-select v-model = "form.first_cateid" placeholder="请选择一级分类"
+          >
+            <el-option label="请选择一级分类" :value="0"></el-option>
+              <!-- 循环一级分类 -->
+            <el-option
+            v-for="item of firstCategoryList"
+            :key = "item.id"
+            :label ="' |- ' + item.catename"
+            :value = "item.id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
     </el-form>
     </el-dialog>
 </template>
 
 <script>
+import { mapGetters, mapState } from 'vuex'
 const defaultForm = {
   title: '', // 限时秒杀名称
   begintime: '', // 开始时间
@@ -41,7 +56,7 @@ const defaultForm = {
 export default {
   data () {
     return {
-      dialogFormVisible: false,
+      dialogFormVisible: true,
       title: '', // 对话框的标题
       createTime: [], // 开始时间 结束时间
       form: {...defaultForm},
@@ -53,7 +68,21 @@ export default {
       secondCategoryList: [] // 二级分类数据
     }
   },
+  computed: {
+    ...mapState({
+      // 获取分类列表
+      categoryList: state => state.category.list
+    }),
+    ...mapGetters({
+      // 获取一级分类
+      firstCategoryList: 'category/firstCategoryList'
+    })
+  },
   mounted () {
+    // 如果没有一级分类信息, 则重新获取信息
+    if (this.categoryList.length === 0) {
+      this.$store.dispatch('category/getCategoryList')
+    }
   },
   methods: {
     timeRange () {
