@@ -57,7 +57,7 @@
             <el-option label="请选择商品" :value="0"></el-option>
               <!-- 循环一级分类 -->
             <el-option
-            v-for="item of goodsList"
+            v-for="item of selectedGoodsList"
             :key = "item.id"
             :label ="item.goodsname"
             :value = "item.id"
@@ -126,7 +126,8 @@ export default {
           { validator: checkSecondCate, trigger: 'change' }
         ]
       },
-      secondCategoryList: [] // 二级分类数据
+      secondCategoryList: [], // 二级分类数据
+      selectedGoodsList: [] // 商品列表数据
     }
   },
   computed: {
@@ -167,6 +168,8 @@ export default {
     onChangeFirstCategory (id) {
       // 清空表单的二级分类id
       this.form.second_cateid = 0
+      // 清空商品列表
+      this.form.goodsid = 0
       // 如果id为0则清空二级分类
       // 如果id>0则获取当前的二级分类
       if (id > 0) {
@@ -177,7 +180,14 @@ export default {
       }
     },
     onChangeSecondCategory (id) {
-      console.log(id)
+      // console.log(id)
+      // 清空商品列表
+      this.form.goodsid = 0
+      if (id > 0) {
+        this.selectedGoodsList = this.goodsList.filter(item => item.second_cateid === id)
+      } else {
+        this.selectedGoodsList = []
+      }
     }
   }
 }
