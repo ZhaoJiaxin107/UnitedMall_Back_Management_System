@@ -76,7 +76,7 @@ export default {
       // console.log(page)
       // 更改vuex中的当前页
       this.$store.commit('specs/SET_PAGE', page)
-      // 重新获取当前页的管理员数据
+      // 重新获取当前页的规格数据
       this.$store.dispatch('specs/getSpecsList')
     },
     onEdit (data) {
