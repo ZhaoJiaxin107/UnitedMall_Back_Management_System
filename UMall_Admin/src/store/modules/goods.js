@@ -43,7 +43,7 @@ export default {
       // console.log(total)
       if (total > 0) {
         const list = await getPageGoods(1, total)
-        // console.log(list)
+        console.log(list)
         commit('SET_ALLLIST', list)
       }
     }
