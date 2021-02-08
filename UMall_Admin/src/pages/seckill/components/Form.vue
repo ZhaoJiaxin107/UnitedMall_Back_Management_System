@@ -52,7 +52,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="商品">
+        <el-form-item label="商品" prop="goodsid">
           <el-select v-model = "form.goodsid" placeholder="请选择商品">
             <el-option label="请选择商品" :value="0"></el-option>
               <!-- 循环一级分类 -->
@@ -110,6 +110,14 @@ export default {
         callback()
       }
     }
+    const checkGoods = (rule, value, callback) => {
+      // 如果值不为0就代表通过
+      if (value === 0) {
+        callback(new Error('请选择商品'))
+      } else {
+        callback()
+      }
+    }
     return {
       dialogFormVisible: true,
       title: '', // 对话框的标题
@@ -124,6 +132,9 @@ export default {
         ],
         second_cateid: [
           { validator: checkSecondCate, trigger: 'change' }
+        ],
+        goodsid: [
+          { validator: checkGoods, trigger: 'change' }
         ]
       },
       secondCategoryList: [], // 二级分类数据
