@@ -173,7 +173,7 @@ export default {
       this.form.endtime = this.createTime[1].getTime()
       let curTime = new Date().getTime()
       // 如果结束时间还未到当前时间，则启用
-      if (this.form.endtime > curTime) {
+      if (this.form.endtime.getTime() > curTime) {
         this.form.status = 1
       } else {
         this.form.status = 0
@@ -240,6 +240,8 @@ export default {
     clearForm () {
       // 把表单数据还原到初始值
       this.form = { ...defaultForm }
+      // 日期清空
+      this.createTime = []
       // 清空所有的表单验证
       // $nextTick 是在下次 DOM 更新循环结束之后执行延迟回调
       this.$nextTick(() => {
@@ -248,7 +250,15 @@ export default {
     },
     // 修改时设置表单数据
     setFormData (data) {
+      // console.log(data.begintime, data.endtime)
+      let begin = parseFloat(data.begintime)
+      let end = parseFloat(data.endtime)
       this.form = {...data} // 复制一份数据
+      begin = new Date(begin).toLocaleString()
+      end = new Date(end).toLocaleString()
+      // console.log(begin, end)
+      this.createTime.push(begin)
+      this.createTime.push(end)
     }
   }
 }
