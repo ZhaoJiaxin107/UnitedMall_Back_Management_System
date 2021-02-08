@@ -9,6 +9,7 @@ import category from './modules/category'
 import specs from './modules/specs'
 import goods from './modules/goods'
 import banner from './modules/banner'
+import seckill from './modules/seckill'
 // 使用vuex插件
 Vue.use(Vuex)
 
@@ -21,7 +22,8 @@ const store = new Vuex.Store({
     category,
     specs,
     goods,
-    banner
+    banner,
+    seckill
   }
 })
 

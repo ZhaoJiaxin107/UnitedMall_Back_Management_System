@@ -122,7 +122,7 @@ export default {
       }
     }
     return {
-      dialogFormVisible: true,
+      dialogFormVisible: false,
       title: '', // 对话框的标题
       createTime: [], // 开始时间 结束时间
       form: {...defaultForm},
@@ -231,7 +231,7 @@ export default {
             }
           })
           // 刷新列表数据
-          // this.$store.dispatch('seckill/getSeckillList')
+          this.$store.dispatch('seckill/getSeckillList')
         })
         .catch((err) => {
           this.$message.error(err.message)
