@@ -2,6 +2,7 @@
     <el-dialog
     :title="title"
     :visible.sync="dialogFormVisible"
+    @close = "clearForm"
   >
     <el-form
       :model="form"
@@ -75,7 +76,7 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary">确 定</el-button>
+        <el-button type="primary" @click="onSubmit">确 定</el-button>
       </el-form-item>
     </el-form>
     </el-dialog>
@@ -83,6 +84,8 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
+// 导出限时秒杀的接口文件
+import * as model from '@/api/seckill'
 const defaultForm = {
   title: '', // 限时秒杀名称
   begintime: '', // 开始时间
@@ -199,6 +202,53 @@ export default {
       } else {
         this.selectedGoodsList = []
       }
+    },
+    onSubmit () {
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          // 根据form数据中是否有id属性来判断当前是修改菜单还是添加菜单
+          if (this.form.id && this.form.id > 0) {
+            // 修改
+            this.editAdmin('updateSeckill')
+          } else {
+            // 添加
+            this.editAdmin()
+          }
+        }
+      })
+    },
+    editAdmin (method = 'addSeckill') {
+      // 处理菜单的添加,把表单的数据提交给接口
+      model[method](this.form)
+        .then(() => {
+          // 添加成功
+          // 显示添加成功的信息
+          this.$message.success({
+            message: method === 'addSeckill' ? '添加成功' : '修改成功',
+            // 关闭对话框
+            onClose: () => {
+              this.dialogFormVisible = false
+            }
+          })
+          // 刷新列表数据
+          // this.$store.dispatch('seckill/getSeckillList')
+        })
+        .catch((err) => {
+          this.$message.error(err.message)
+        })
+    },
+    clearForm () {
+      // 把表单数据还原到初始值
+      this.form = { ...defaultForm }
+      // 清空所有的表单验证
+      // $nextTick 是在下次 DOM 更新循环结束之后执行延迟回调
+      this.$nextTick(() => {
+        this.$refs.form.clearValidate()
+      })
+    },
+    // 修改时设置表单数据
+    setFormData (data) {
+      this.form = {...data} // 复制一份数据
     }
   }
 }
