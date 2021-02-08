@@ -63,7 +63,7 @@ export default {
 <style scoped>
 .aside {
   background: #3d5f81;
-  height: 570px;
+  height: 680px;
   overflow-y: scroll;
   overflow-x:hidden;
 }

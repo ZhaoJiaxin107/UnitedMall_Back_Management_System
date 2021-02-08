@@ -7,7 +7,7 @@ export default {
     allList: [], // 所有的规格
     list: [],
     page: 1, // 当前的页码
-    size: 4, // 每页显示的条数
+    size: 5, // 每页显示的条数
     total: 0 // 管理员用户总数
   },
   mutations: {
