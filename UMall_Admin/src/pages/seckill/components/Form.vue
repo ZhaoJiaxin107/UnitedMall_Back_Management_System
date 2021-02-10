@@ -259,6 +259,11 @@ export default {
       // console.log(begin, end)
       this.createTime.push(begin)
       this.createTime.push(end)
+      // 根据商品的一级分类设置二级分类的数据
+      const category = this.categoryList.find(item => item.id === data.first_cateid)
+      this.secondCategoryList = category.children || []
+      // 根据商品的二级分类设置商品数据
+      this.selectedGoodsList = this.goodsList.filter(item => item.second_cateid === data.second_cateid)
     }
   }
 }
