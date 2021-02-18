@@ -65,7 +65,7 @@ export default {
               // 关闭对话框
               this.dialogFormVisible = false
               // 刷新列表数据
-              this.$store.dispatch('role/getRoleList')
+              this.$store.dispatch('seckill/getSeckillList')
             }
           })
         }).catch(err => {
