@@ -5,6 +5,7 @@ import Vuex from 'vuex'
 import menu from './modules/menu'
 import role from './modules/role'
 import admin from './modules/admin'
+import member from './modules/member'
 import category from './modules/category'
 import specs from './modules/specs'
 import goods from './modules/goods'
@@ -19,6 +20,7 @@ const store = new Vuex.Store({
     menu,
     role,
     admin,
+    member,
     category,
     specs,
     goods,
