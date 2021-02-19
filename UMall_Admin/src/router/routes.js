@@ -39,6 +39,14 @@ const routes = [
         }
       },
       {
+        path: 'member',
+        name: 'member',
+        component: () => import('@/pages/member/Index'),
+        meta: {
+          title: '会员管理'
+        }
+      },
+      {
         path: 'category',
         name: 'category',
         component: () => import('@/pages/category/Index'),

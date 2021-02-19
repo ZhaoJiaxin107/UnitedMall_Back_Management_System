@@ -49,4 +49,19 @@ router.post("/memberedit", async (req, res) => {
         result === true ? res.send(Success()) : res.send(MError(result));
     }
 });
+// 删除会员
+router.post("/memberdelete", async (req, res) => {
+    let { uid } = req['body'];
+    if (!uid) {
+        res.send(MError("缺少必要条件"));
+    } else {
+        const result = await Db.delete(req, `DELETE FROM ${tableName} WHERE uid = '${uid}'`);
+        if(result === true){
+            data = await Db.select(req, `SELECT * FROM ${tableName}`);
+            res.send(Success(data))
+        }else{
+            res.send(MError());
+        }
+    }
+});
 module.exports = router;
