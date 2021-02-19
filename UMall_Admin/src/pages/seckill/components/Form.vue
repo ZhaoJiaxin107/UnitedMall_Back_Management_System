@@ -176,7 +176,7 @@ export default {
       if (this.form.endtime.getTime() > curTime) {
         this.form.status = 1
       } else {
-        this.form.status = 0
+        this.form.status = 2
       }
     },
     onChangeFirstCategory (id) {
