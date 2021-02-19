@@ -4,6 +4,7 @@
     :data = "list"
     style="width: 100%;margin: 20px 0;"
     row-key="id"
+    height="400"
     border>
     <!-- el-table-column:表格的列组件
         prop: 菜单数据中对应的数据
