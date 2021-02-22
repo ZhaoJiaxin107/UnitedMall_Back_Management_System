@@ -1,4 +1,5 @@
-# UnitedMall_Backend_Management_System
+UnitedMall_Backend_Management_System
+
 United Mall Backend Management System Using using Vue.js, Element UI and axios
 
 ### 如何启动项目
@@ -58,6 +59,7 @@ npm run dev
 
   - 分页显示管理员数据
 
+* 会员管理(增删改查)
 * 商品分类(增删改查)
 
   - 获取一级分类
@@ -86,3 +88,66 @@ npm run dev
   - 一级分类、二级分类与商品信息三级联动
 
 - 轮播图管理(增删改查)
+
+### How to start a project
+
+```
+git clone
+https://github.com/ZhaoJiaxin107/UnitedMall_ Back_ Management_ System.git
+```
+
+Start background api
+
+```
+cd UMall_ API
+npm start
+```
+
+Start the frontend project
+
+```
+cd UMall_ Admin
+npm run dev
+```
+
+### Main functions
+
+- Login (administrator)
+  - If the jump page is not a login page, you need to login before you can access it
+  - Judge whether the user has the corresponding permissions, and automatically jump to the home page when there is no permission to access
+  - If the login is successful, it will be stored in sessionstorage
+
+* home page
+  - Displaying chart data with ecarts
+  - Menu management
+  - Element UI dialog box and table component
+  - Switching between directory and menu
+  - Add form validation
+  - Get superior menu
+
+* Role management
+  - The use of element UI tree control
+  - Different roles correspond to different permissions
+
+* Administrator management (add, delete, change and check)
+  - Display administrator data in pages
+* Member management (add, delete, change and check)
+* Commodity classification
+  - Get the first level classification
+  - Picture upload
+* Product Specification
+  - Add specification attribute more than once
+  - Display specification data by page
+  - Convert the added specification attribute array to string storage
+* Commodity management
+  - Using element UI tab
+  - Linkage between primary classification and secondary classification
+  - Commodity specifications and the use of specification attributes
+  - Upload pictures
+  - The use of rich text editor
+  - Display product information by page
+* Second kill activity
+  - Element UI component calendar component
+  - Three level linkage of primary classification, secondary classification and commodity information
+* Management of carousel map
+
