@@ -58,15 +58,15 @@ module.exports = {
     index: path.resolve(__dirname, '../dist/index.html'),
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsRoot: path.resolve(__dirname, '../dist'), // 打包的目录
+    assetsSubDirectory: 'static', // 静态资源的目录
+    assetsPublicPath: '/', 
 
     /**
      * Source Maps
      */
 
-    productionSourceMap: true,
+    productionSourceMap: false, // 是否生成source map文件
     // https://webpack.js.org/configuration/devtool/#production
     devtool: '#source-map',
 
