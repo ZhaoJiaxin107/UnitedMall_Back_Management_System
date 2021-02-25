@@ -30,8 +30,13 @@ export const updateCategory = (data) => {
   if (!data.get('id')) {
     return Promise.reject(new Error('缺少ID参数或ID参数错误'))
   }
-  return http.post('/cateedit', data)
+  return http.post('/cateedit', data, {
+    headers: {
+      'content-type': 'multipart/form-data'
+    }
+  })
 }
+
 // 删除分类
 export const deleteCategory = (id) => {
   return http.post('/catedelete', { id })

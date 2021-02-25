@@ -111,7 +111,6 @@
 import { mapGetters } from 'vuex'
 // 引入接口方法
 // 导出所有的非default内容
-// import { addMenu, updateMenu } from '@/api/menu'
 import * as model from '@/api/category'
 const defaultForm = {
   pid: 0, // 上级分类编号, 顶级菜单为0
@@ -146,7 +145,7 @@ export default {
   methods: {
     // 上传图片
     uploadImg (file, fileList) {
-      console.log(file, fileList)
+      // console.log(file, fileList)
       // 对大小和类型进行限制
       const allowType = ['image/png', 'image/gif', 'image/jpeg']
       if (!allowType.includes(file.raw.type)) {
@@ -182,7 +181,7 @@ export default {
       this.dialogVisible = true
     },
     handleRemove (file) {
-      console.log(file, this.fileList)
+      // console.log(file, this.fileList)
       // this.fileList = []
       // 从filelist中删除选择的图片
       this.fileList = this.fileList.filter(item => item.url !== file.url)

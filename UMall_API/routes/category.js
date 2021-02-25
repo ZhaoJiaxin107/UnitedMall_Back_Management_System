@@ -90,6 +90,7 @@ router.get("/cateinfo", async (req, res) => {
 })
 //修改分类
 router.post("/cateedit", async (req, res) => {
+	console.log(res)
 	const resultObj = await moveFile(req);
 	if (resultObj === false) {
 		res.send(MError([], "分类信息上传失败"));
